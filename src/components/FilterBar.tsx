@@ -1,6 +1,6 @@
 import { Search, X } from 'lucide-react';
 import type { Ref } from 'react';
-import type { CategoryId } from '../utils/categoryParser';
+import type { SelectedCategory } from '../utils/categoryParser';
 import CategoryFilter from './CategoryFilter';
 
 type Props = {
@@ -8,8 +8,8 @@ type Props = {
   onQueryChange: (query: string) => void;
   onClear: () => void;
   searchRef: Ref<HTMLInputElement>;
-  category: CategoryId | null;
-  onCategoryChange: (category: CategoryId | null) => void;
+  category: SelectedCategory;
+  onCategoryChange: (category: SelectedCategory) => void;
 };
 
 // I mobilen står sökfältet överst och pillren under. På desktop står pillren till vänster om sökfältet.

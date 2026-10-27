@@ -4,15 +4,15 @@ import EventTimeline from './components/EventTimeline';
 import FilterBar from './components/FilterBar';
 import Header from './components/Header';
 import { useEvents } from './hooks/useEvents';
-import type { CategoryId } from './utils/categoryParser';
+import type { SelectedCategory } from './utils/categoryParser';
 import { filterByCategory, searchEvents } from './utils/eventSearch';
 
 export default function App() {
   const { events, isLoading, error, isDemo, retry } = useEvents();
   const [query, setQuery] = useState('');
-  const [category, setCategory] = useState<CategoryId | null>(null);
+  const [category, setCategory] = useState<SelectedCategory>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  // Där den klistriga raden börjar. Står man längre ner hoppar ett byte av kategori hit, så att listan börjar precis under raden.
+  // Ett byte av kategori långt ner hoppar hit, så att listan börjar precis under den klistriga raden.
   const listStartRef = useRef<HTMLDivElement>(null);
 
   // Fokus tillbaka till sökfältet, så att den som rensar kan skriva något nytt direkt.
@@ -21,14 +21,16 @@ export default function App() {
     searchRef.current?.focus();
   }
 
-  function showAll() {
+  // Fokus till sökfältet bara när det fanns en sökning, så att mobilens tangentbord inte öppnas i onödan.
+  function resetFilters() {
     setCategory(null);
-    clearSearch();
+    if (query) clearSearch();
   }
 
-  function selectCategory(next: CategoryId | null) {
+  function selectCategory(next: SelectedCategory) {
     setCategory(next);
-    const listStart = listStartRef.current!.getBoundingClientRect().top + window.scrollY;
+    if (!listStartRef.current) return;
+    const listStart = listStartRef.current.getBoundingClientRect().top + window.scrollY;
     if (window.scrollY > listStart) window.scrollTo({ top: listStart });
   }
 
@@ -51,7 +53,7 @@ export default function App() {
             events={searchEvents(filterByCategory(events, category), query)}
             query={query}
             category={category}
-            onShowAll={showAll}
+            onReset={resetFilters}
             isLoading={isLoading}
             error={error}
             onRetry={retry}

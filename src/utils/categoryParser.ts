@@ -52,6 +52,9 @@ export const CATEGORIES = [
 
 export type CategoryId = (typeof CATEGORIES)[number]['id'];
 
+// Den kategori som filtret visar. null betyder Alla.
+export type SelectedCategory = CategoryId | null;
+
 export function categoryById(id: CategoryId) {
   return CATEGORIES.find((category) => category.id === id) ?? CATEGORIES.find((category) => category.id === 'ovrigt')!;
 }

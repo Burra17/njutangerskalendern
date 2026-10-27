@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
-import { categoryById, type CategoryId } from '../utils/categoryParser';
+import { categoryById, type SelectedCategory } from '../utils/categoryParser';
 import { groupByMonth } from '../utils/monthGroups';
 import EventCard from './EventCard';
 
 type Props = {
   events: CalendarEvent[];
   query: string;
-  category: CategoryId | null;
-  onShowAll: () => void;
+  category: SelectedCategory;
+  onReset: () => void;
   isLoading: boolean;
   error: string | null;
   onRetry: () => void;
 };
 
-export default function EventTimeline({ events, query, category, onShowAll, isLoading, error, onRetry }: Props) {
+export default function EventTimeline({ events, query, category, onReset, isLoading, error, onRetry }: Props) {
   // Idag och Pågår räknas fram när sidan visas. Ingen klocka uppdaterar dem medan sidan står öppen (beslut i #10).
   const [now] = useState(() => new Date());
 
@@ -46,19 +46,19 @@ export default function EventTimeline({ events, query, category, onShowAll, isLo
       <p role='status' className='sr-only'>
         {(search || categoryLabel) && matchCount(events.length)}
       </p>
-      <EventList events={events} search={search} categoryLabel={categoryLabel} onShowAll={onShowAll} now={now} />
+      <EventList events={events} search={search} categoryLabel={categoryLabel} onReset={onReset} now={now} />
     </>
   );
 }
 
-type EventListProps = { events: CalendarEvent[]; search: string; categoryLabel: string | null; onShowAll: () => void; now: Date };
+type EventListProps = { events: CalendarEvent[]; search: string; categoryLabel: string | null; onReset: () => void; now: Date };
 
-function EventList({ events, search, categoryLabel, onShowAll, now }: EventListProps) {
+function EventList({ events, search, categoryLabel, onReset, now }: EventListProps) {
   if (events.length === 0 && (search || categoryLabel)) {
     return (
       <div className='rounded-lg border border-slate-200 bg-white p-6'>
         <p>{noMatchText(search, categoryLabel)}</p>
-        <button type='button' onClick={onShowAll} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
+        <button type='button' onClick={onReset} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
           {categoryLabel ? 'Visa allt' : 'Rensa sökningen'}
         </button>
       </div>

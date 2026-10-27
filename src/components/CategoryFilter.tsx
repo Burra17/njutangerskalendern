@@ -1,6 +1,6 @@
-import { CATEGORIES, type CategoryId } from '../utils/categoryParser';
+import { CATEGORIES, type SelectedCategory } from '../utils/categoryParser';
 
-type Props = { selected: CategoryId | null; onSelect: (category: CategoryId | null) => void };
+type Props = { selected: SelectedCategory; onSelect: (category: SelectedCategory) => void };
 
 const PILLS = [{ id: null, label: 'Alla', emoji: null, badgeClass: 'bg-slate-100 text-slate-700' }, ...CATEGORIES];
 

@@ -14,7 +14,7 @@ const fika: CalendarEvent = {
 };
 const byfest: CalendarEvent = { id: 'byfest', title: 'TEST Byfest', category: 'fika', allDay: true, startDate: '2026-11-01', endDate: '2026-11-03' };
 
-const idle = { events: [], query: '', category: null, onShowAll: () => {}, isLoading: false, error: null, onRetry: () => {} };
+const idle = { events: [], query: '', category: null, onReset: () => {}, isLoading: false, error: null, onRetry: () => {} };
 
 afterEach(cleanup);
 
