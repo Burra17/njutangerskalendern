@@ -55,6 +55,12 @@ describe('toPlainText', () => {
     expect(toPlainText('<i>Obs!</i> <span style="color:red">Ny tid</span>')).toBe('Obs! Ny tid');
   });
 
+  test('klarar en riktig beskrivning från Googles webbredigerare', () => {
+    const fromGoogle =
+      'Dagordning:<br><ul><li>hej</li><li>tja</li></ul><a href="https://www.efsbrogarden.se">Vandrarhem</a><br><br>Arrangör: Byalaget';
+    expect(toPlainText(fromGoogle)).toBe('Dagordning:\n• hej\n• tja\nVandrarhem (https://www.efsbrogarden.se)\n\nArrangör: Byalaget');
+  });
+
   test('avkodar entiteter', () => {
     expect(toPlainText('Kaffe &amp; bulle&nbsp;20&nbsp;kr, &quot;fika&quot; &lt;3 &#39;välkommen&#39; &#8211; &#x2764;')).toBe(
       'Kaffe & bulle 20 kr, "fika" <3 \'välkommen\' – ❤',

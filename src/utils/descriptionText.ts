@@ -6,7 +6,10 @@ export function toPlainText(html: string): string {
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/p>/gi, '\n')
     .replace(/<li[^>]*>/gi, '\n• ')
+    .replace(/<\/(ul|ol)>/gi, '\n')
     .replace(/<[^>]*>/g, '')
+    // Google skriver ofta <br> före listan, och då ska ingen tom rad hamna före första punkten.
+    .replace(/\n+• /g, '\n• ')
     // Efter taggarna, så att "&lt;b&gt;" blir texten "<b>" och inte en tagg.
     .replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, decodeEntity);
   return tidyLines(text);
