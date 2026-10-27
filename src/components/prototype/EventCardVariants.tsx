@@ -1,17 +1,18 @@
 // PROTOTYP för #12. Tre varianter av händelsekortet, valda med ?variant=A|B|C. Slängs när André har valt.
 // Ingen av hjälpfunktionerna här är testad. De skrivs om ordentligt i utils/ när vinnaren byggs.
-import { CalendarDays, ChevronDown, Clock, MapPin, Repeat, User } from 'lucide-react';
+import { CalendarDays, CalendarPlus, ChevronDown, ChevronRight, Clock, MapPin, Repeat, User } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import type { CalendarEvent, EventTiming } from '../../types/calendar';
 import { CATEGORIES } from '../../utils/categoryParser';
 import { addDays, shortDate, startDay, toStockholmDate } from '../../utils/dates';
 
-export const VARIANTS = { A: 'Datumbricka', B: 'Agenda', C: 'Färgband' } as const;
+export const VARIANTS = { A: 'Datumbricka', B: 'Agenda', C: 'Färgband', D: 'Som Gemini' } as const;
 export type VariantKey = keyof typeof VARIANTS;
 
 export function EventCardVariant({ variant, event }: { variant: VariantKey; event: CalendarEvent }) {
   if (variant === 'B') return <AgendaRow event={event} />;
   if (variant === 'C') return <BandCard event={event} />;
+  if (variant === 'D') return <GeminiCard event={event} />;
   return <DateTileCard event={event} />;
 }
 
@@ -133,6 +134,94 @@ function IconLine({ icon, children }: { icon: ReactNode; children: ReactNode }) 
       <span className='text-emerald-800'>{icon}</span>
       {children}
     </li>
+  );
+}
+
+// ---------------------------------------------------------------- D: Som Gemini
+// Efter Andrés Gemini-skiss: liten datumruta, bricka, titel, tid och plats på en rad och en rad av beskrivningen.
+// Utfällt: hela beskrivningen, arrangören till vänster och "Spara i min kalender" till höger.
+function GeminiCard({ event }: { event: CalendarEvent }) {
+  const [open, setOpen] = useState(false);
+  const category = categoryOf(event);
+  const tile = dateTile(event);
+  return (
+    <li className={`rounded-xl border bg-white shadow-sm transition-shadow hover:shadow-md ${open ? 'border-emerald-300' : 'border-slate-200'}`}>
+      <button type='button' aria-expanded={open} onClick={() => setOpen(!open)} className='flex w-full gap-4 p-4 text-left'>
+        <div
+          className={`flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-lg border ${
+            tile.highlight ? 'border-emerald-800 bg-emerald-800 text-white' : 'border-slate-200 bg-slate-50 text-slate-900'
+          }`}
+        >
+          <span className={`text-[11px] font-semibold tracking-tight uppercase ${tile.highlight ? '' : 'text-slate-500'}`}>{tile.label}</span>
+          <span className='text-2xl leading-tight font-bold'>{tile.day}</span>
+        </div>
+        <div className='min-w-0 flex-1'>
+          <span className={`inline-block rounded-md px-2 py-0.5 text-sm font-medium ${category.badgeClass}`}>{category.label}</span>
+          <h3 className='mt-1 text-lg leading-snug font-bold text-slate-900'>{event.title}</h3>
+          <p className='mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-base text-slate-600'>
+            <span className='inline-flex items-center gap-1.5'>
+              <Clock aria-hidden className='size-4' />
+              {timeText(event)}
+            </span>
+            {event.location && (
+              <span className='inline-flex items-center gap-1.5'>
+                <MapPin aria-hidden className='size-4' />
+                {shortPlace(event.location)}
+              </span>
+            )}
+            {event.series && (
+              <span className='inline-flex items-center gap-1.5'>
+                <Repeat aria-hidden className='size-4' />
+                {event.series.rule}
+              </span>
+            )}
+          </p>
+          {!open && event.description && <p className='mt-1 line-clamp-1 text-base text-slate-500'>{event.description.split(/\n/)[0]}</p>}
+        </div>
+        {open ? (
+          <ChevronDown aria-hidden className='size-5 shrink-0 text-slate-400' />
+        ) : (
+          <ChevronRight aria-hidden className='size-5 shrink-0 text-slate-400' />
+        )}
+      </button>
+      {open && (
+        <div className='mx-4 border-t border-slate-100 pt-3 pb-4 sm:ml-[6rem]'>
+          <div className='space-y-3 text-slate-800'>
+            {event.description && <p className='whitespace-pre-line'>{linkify(event.description)}</p>}
+            {event.location && event.location !== shortPlace(event.location) && <p className='text-slate-600'>{event.location}</p>}
+            {event.series && <p className='text-slate-600'>Även {listDates(event.series.later.slice(0, 3).map(timingDay))}.</p>}
+          </div>
+          <div className='mt-4 flex flex-wrap items-center justify-between gap-3'>
+            <p className='text-base text-slate-500'>
+              {event.organizer && (
+                <>
+                  Arrangör: <span className='font-semibold text-slate-800'>{event.organizer}</span>
+                </>
+              )}
+            </p>
+            <span className='inline-flex items-center gap-2 rounded-lg bg-emerald-800 px-4 py-2 text-base font-semibold text-white'>
+              <CalendarPlus aria-hidden className='size-5' />
+              Spara i min kalender
+            </span>
+          </div>
+        </div>
+      )}
+    </li>
+  );
+}
+
+// Månadsrubriken i Gemini-skissen: en grön pill med versaler och en linje till höger.
+export function GeminiMonthHeading({ id, title }: { id: string; title: string }) {
+  return (
+    <div className='mb-4 flex items-center gap-3'>
+      <h2
+        id={id}
+        className='rounded-md border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-bold tracking-wider text-emerald-800 uppercase'
+      >
+        {title}
+      </h2>
+      <span aria-hidden className='h-px flex-1 bg-slate-200' />
+    </div>
   );
 }
 

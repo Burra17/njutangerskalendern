@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
 import { groupByMonth } from '../utils/monthGroups';
-import { EventCardVariant } from './prototype/EventCardVariants';
+import { EventCardVariant, GeminiMonthHeading } from './prototype/EventCardVariants';
 import PrototypeSwitcher, { readVariant } from './prototype/PrototypeSwitcher';
 
 type Props = { events: CalendarEvent[]; isLoading: boolean; error: string | null; onRetry: () => void };
@@ -35,9 +35,13 @@ export default function EventTimeline({ events, isLoading, error, onRetry }: Pro
     <div className='space-y-8'>
       {groupByMonth(events).map((group) => (
         <section key={group.key} aria-labelledby={`month-${group.key}`}>
-          <h2 id={`month-${group.key}`} className='mb-3 text-xl font-bold text-slate-900'>
-            {group.title}
-          </h2>
+          {variant === 'D' ? (
+            <GeminiMonthHeading id={`month-${group.key}`} title={group.title} />
+          ) : (
+            <h2 id={`month-${group.key}`} className='mb-3 text-xl font-bold text-slate-900'>
+              {group.title}
+            </h2>
+          )}
           <ul className='space-y-3'>
             {group.events.map((event) => (
               <EventCardVariant key={event.id} variant={variant} event={event} />
