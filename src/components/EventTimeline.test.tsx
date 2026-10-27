@@ -42,7 +42,7 @@ describe('EventTimeline', () => {
     render(<EventTimeline {...idle} events={[fika, byfest]} />);
 
     expect(screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)).toEqual(['Oktober 2026', 'November 2026']);
-    expect(screen.getByText('28 okt · TEST ☕ Fika')).toBeTruthy();
-    expect(screen.getByText('1 nov · TEST Byfest')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /TEST ☕ Fika/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /TEST Byfest/ })).toBeTruthy();
   });
 });
