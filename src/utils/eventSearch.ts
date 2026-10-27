@@ -1,5 +1,5 @@
 import type { CalendarEvent } from '../types/calendar';
-import { categoryById } from './categoryParser';
+import { categoryById, type SelectedCategory } from './categoryParser';
 
 // Varje ord i sökningen måste finnas någonstans i händelsen, men inte i följd eller i samma fält.
 export function searchEvents(events: CalendarEvent[], query: string): CalendarEvent[] {
@@ -9,6 +9,10 @@ export function searchEvents(events: CalendarEvent[], query: string): CalendarEv
     const text = normalize(searchableText(event));
     return words.every((word) => text.includes(word));
   });
+}
+
+export function filterByCategory(events: CalendarEvent[], category: SelectedCategory): CalendarEvent[] {
+  return category ? events.filter((event) => event.category === category) : events;
 }
 
 function searchableText(event: CalendarEvent): string {

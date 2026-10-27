@@ -1,14 +1,23 @@
 import { Search, X } from 'lucide-react';
 import type { Ref } from 'react';
+import type { SelectedCategory } from '../utils/categoryParser';
+import CategoryFilter from './CategoryFilter';
 
-type Props = { query: string; onQueryChange: (query: string) => void; onClear: () => void; searchRef: Ref<HTMLInputElement> };
+type Props = {
+  query: string;
+  onQueryChange: (query: string) => void;
+  onClear: () => void;
+  searchRef: Ref<HTMLInputElement>;
+  category: SelectedCategory;
+  onCategoryChange: (category: SelectedCategory) => void;
+};
 
-// Kategoripillren kommer hit i 3.5: till vänster om sökfältet på desktop, och under det i mobilen.
-export default function FilterBar({ query, onQueryChange, onClear, searchRef }: Props) {
+// I mobilen står sökfältet överst och pillren under. På desktop står pillren till vänster om sökfältet.
+export default function FilterBar({ query, onQueryChange, onClear, searchRef, category, onCategoryChange }: Props) {
   return (
     <div className='sticky top-0 z-10 border-b border-slate-200 bg-white shadow-sm'>
-      <div className='mx-auto flex max-w-6xl px-4 py-3'>
-        <div role='search' className='relative w-full lg:ml-auto lg:w-80'>
+      <div className='mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 lg:flex-row lg:items-start'>
+        <div role='search' className='relative w-full lg:w-80 lg:shrink-0'>
           <Search aria-hidden className='pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-slate-400' />
           {/* Webbläsarens eget kryss döljs, eftersom det ser olika ut och ibland saknas. Vårt ✕ ersätter det. */}
           <input
@@ -30,6 +39,9 @@ export default function FilterBar({ query, onQueryChange, onClear, searchRef }: 
               <X aria-hidden className='size-5' />
             </button>
           )}
+        </div>
+        <div className='min-w-0 lg:order-first lg:flex-1'>
+          <CategoryFilter selected={category} onSelect={onCategoryChange} />
         </div>
       </div>
     </div>
