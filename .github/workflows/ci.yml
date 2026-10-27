@@ -1,0 +1,55 @@
+name: CI
+
+# Körningen på main visar i efterhand om något har tagit sig förbi PR-grinden.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Jobbet läser bara kod, och GITHUB_TOKEN ska inte kunna skriva till repot.
+permissions:
+  contents: read
+
+# En ny push avbryter PR:ens förra körning, men på main får varje commit köra klart.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Inget paths-filter: ett obligatoriskt jobb som hoppas över fastnar som "pending" och blockerar merge.
+jobs:
+  # Jobbets id är checkens namn i branch protection, och därför har det inget name:.
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      # --frozen-lockfile: CI får inte skriva om yarn.lock och bygga något annat än det som finns lokalt.
+      - name: Installera beroenden
+        run: yarn install --frozen-lockfile
+
+      - name: Format
+        run: yarn format:check
+
+      # !cancelled() kör steget även när ett tidigare fallit, så att alla fel syns i samma varv.
+      - name: Lint
+        if: '!cancelled()'
+        run: yarn lint
+
+      # Bygget kör också tsc -b, men ett eget steg ger typfelen rätt namn.
+      - name: Typecheck
+        if: '!cancelled()'
+        run: yarn typecheck
+
+      - name: Test
+        if: '!cancelled()'
+        run: yarn test
+
+      - name: Bygg
+        if: '!cancelled()'
+        run: yarn build
