@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { CalendarEvent } from '../types/calendar';
-import { searchEvents } from './eventSearch';
+import { filterByCategory, searchEvents } from './eventSearch';
 
 const timing = { allDay: true as const, startDate: '2026-11-07', endDate: '2026-11-07' };
 
@@ -61,5 +61,19 @@ describe('searchEvents', () => {
 
   test('behåller ordningen', () => {
     expect(ids('e')).toEqual(['loppis', 'gympa', 'mote']);
+  });
+});
+
+describe('filterByCategory', () => {
+  test('visar bara den valda kategorin', () => {
+    expect(filterByCategory(all, 'idrott').map((event) => event.id)).toEqual(['gympa']);
+  });
+
+  test('utan vald kategori visas allt', () => {
+    expect(filterByCategory(all, null)).toEqual(all);
+  });
+
+  test('en kategori utan händelser ger en tom lista', () => {
+    expect(filterByCategory(all, 'natur')).toEqual([]);
   });
 });
