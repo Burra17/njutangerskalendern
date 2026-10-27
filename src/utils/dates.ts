@@ -1,4 +1,4 @@
-import type { IsoDate } from '../types/calendar';
+import type { CalendarEvent, IsoDate } from '../types/calendar';
 
 export const STOCKHOLM = 'Europe/Stockholm';
 
@@ -6,8 +6,25 @@ export const STOCKHOLM = 'Europe/Stockholm';
 const isoDateFormat = new Intl.DateTimeFormat('en-CA', { timeZone: STOCKHOLM, year: 'numeric', month: '2-digit', day: '2-digit' });
 const offsetFormat = new Intl.DateTimeFormat('en-US', { timeZone: STOCKHOLM, timeZoneName: 'longOffset' });
 
+// Ett rent datum som tidpunkt mitt på dagen i UTC. Där är det samma datum i alla tidszoner, så det kan formateras utan att hamna på fel dag.
+export function noonUtc(date: IsoDate): Date {
+  return new Date(`${date}T12:00:00Z`);
+}
+
+const shortDateFormat = new Intl.DateTimeFormat('sv-SE', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+
+// Till exempel '28 okt'. Intl skriver 'okt.', och punkten tas bort.
+export function shortDate(date: IsoDate): string {
+  return shortDateFormat.format(noonUtc(date)).replace('.', '');
+}
+
 export function toStockholmDate(instant: Date): IsoDate {
   return isoDateFormat.format(instant);
+}
+
+// Dagen en händelse börjar, i svensk tid.
+export function startDay(event: CalendarEvent): IsoDate {
+  return event.allDay ? event.startDate : toStockholmDate(event.start);
 }
 
 export function addDays(date: IsoDate, days: number): IsoDate {
@@ -24,7 +41,7 @@ export function stockholmMidnight(date: IsoDate): string {
 
 // Stockholms förskjutning mot UTC den dagen, till exempel '+02:00'. Mitt på dagen, eftersom bytet sker på natten.
 export function stockholmOffset(date: IsoDate): string {
-  const name = offsetFormat.formatToParts(new Date(`${date}T12:00:00Z`)).find((part) => part.type === 'timeZoneName')?.value;
+  const name = offsetFormat.formatToParts(noonUtc(date)).find((part) => part.type === 'timeZoneName')?.value;
   if (!name) throw new Error(`Hittade ingen tidszonsförskjutning för ${date}`);
   return name.replace('GMT', '');
 }

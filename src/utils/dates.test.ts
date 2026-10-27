@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { addDays, stockholmMidnight, stockholmOffset, toStockholmDate } from './dates';
+import { addDays, shortDate, stockholmMidnight, stockholmOffset, toStockholmDate } from './dates';
 
 describe('stockholmMidnight', () => {
   test('ger midnatt med dagens förskjutning', () => {
@@ -21,6 +21,14 @@ describe('toStockholmDate', () => {
   test('har redan bytt dag i Stockholm när det fortfarande är kväll i UTC', () => {
     expect(toStockholmDate(new Date('2026-06-18T22:30:00Z'))).toBe('2026-06-19');
     expect(toStockholmDate(new Date('2026-12-31T23:30:00Z'))).toBe('2027-01-01');
+  });
+});
+
+describe('shortDate', () => {
+  test('skriver dag och kort månad utan punkt', () => {
+    expect(shortDate('2026-10-28')).toBe('28 okt');
+    expect(shortDate('2026-11-01')).toBe('1 nov');
+    expect(shortDate('2027-05-09')).toBe('9 maj');
   });
 });
 
