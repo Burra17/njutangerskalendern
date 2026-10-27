@@ -1,10 +1,15 @@
+import { useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
-import { shortDate, startDay } from '../utils/dates';
 import { groupByMonth } from '../utils/monthGroups';
+import { EventCardVariant } from './prototype/EventCardVariants';
+import PrototypeSwitcher, { readVariant } from './prototype/PrototypeSwitcher';
 
 type Props = { events: CalendarEvent[]; isLoading: boolean; error: string | null; onRetry: () => void };
 
 export default function EventTimeline({ events, isLoading, error, onRetry }: Props) {
+  // PROTOTYP för #12: variant väljs med ?variant=.
+  const [variant, setVariant] = useState(readVariant);
+
   if (isLoading) {
     return (
       <p role='status' className='text-slate-600'>
@@ -33,16 +38,14 @@ export default function EventTimeline({ events, isLoading, error, onRetry }: Pro
           <h2 id={`month-${group.key}`} className='mb-3 text-xl font-bold text-slate-900'>
             {group.title}
           </h2>
-          <ul className='space-y-2'>
+          <ul className='space-y-3'>
             {group.events.map((event) => (
-              // Platshållare tills de riktiga korten kommer i #12.
-              <li key={event.id} className='rounded-lg border border-slate-200 bg-white px-4 py-3'>
-                {`${shortDate(startDay(event))} · ${event.title}`}
-              </li>
+              <EventCardVariant key={event.id} variant={variant} event={event} />
             ))}
           </ul>
         </section>
       ))}
+      <PrototypeSwitcher current={variant} onChange={setVariant} />
     </div>
   );
 }
