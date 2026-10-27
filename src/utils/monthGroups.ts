@@ -1,14 +1,15 @@
 import type { CalendarEvent } from '../types/calendar';
-import { startDay } from './dates';
+import { noonUtc, startDay, stockholmMidnight } from './dates';
 
 export type MonthGroup = { key: string; title: string; events: CalendarEvent[] };
 
+// UTC och inte Stockholm, eftersom månaden formateras från ett rent datum via noonUtc.
 const monthFormat = new Intl.DateTimeFormat('sv-SE', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-// Händelserna kommer sorterade efter start, så grupperna hamnar i ordning av sig själva.
 export function groupByMonth(events: CalendarEvent[]): MonthGroup[] {
   const groups: MonthGroup[] = [];
-  for (const event of events) {
+  // Sorteras här, eftersom ett seriekort och mockdatan inte alltid kommer i ordning.
+  for (const event of [...events].sort((a, b) => startTime(a) - startTime(b))) {
     const key = startDay(event).slice(0, 7);
     if (groups.at(-1)?.key !== key) groups.push({ key, title: monthTitle(key), events: [] });
     groups.at(-1)!.events.push(event);
@@ -17,6 +18,10 @@ export function groupByMonth(events: CalendarEvent[]): MonthGroup[] {
 }
 
 function monthTitle(key: string): string {
-  const title = monthFormat.format(new Date(`${key}-15T12:00:00Z`));
+  const title = monthFormat.format(noonUtc(`${key}-15`));
   return title.charAt(0).toUpperCase() + title.slice(1);
+}
+
+function startTime(event: CalendarEvent): number {
+  return event.allDay ? Date.parse(stockholmMidnight(event.startDate)) : event.start.getTime();
 }

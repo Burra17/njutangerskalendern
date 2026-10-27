@@ -36,6 +36,19 @@ describe('groupByMonth', () => {
     expect(group.title).toBe('November 2026');
   });
 
+  test('sorterar själv, så att en serie som kommer sist i listan hamnar på sin plats', () => {
+    const groups = groupByMonth([
+      timed('fika', '2026-10-28T14:30:00Z'),
+      timed('loppis', '2026-11-12T09:00:00Z'),
+      timed('gympa', '2026-10-27T09:00:00Z'),
+    ]);
+
+    expect(groups.map((group) => [group.title, group.events.map((event) => event.id)])).toEqual([
+      ['Oktober 2026', ['gympa', 'fika']],
+      ['November 2026', ['loppis']],
+    ]);
+  });
+
   test('ger inga grupper för en tom lista', () => {
     expect(groupByMonth([])).toEqual([]);
   });

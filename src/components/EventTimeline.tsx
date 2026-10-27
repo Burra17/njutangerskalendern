@@ -1,15 +1,21 @@
 import type { CalendarEvent } from '../types/calendar';
-import { startDay } from '../utils/dates';
+import { shortDate, startDay } from '../utils/dates';
 import { groupByMonth } from '../utils/monthGroups';
 
 type Props = { events: CalendarEvent[]; isLoading: boolean; error: string | null; onRetry: () => void };
 
 export default function EventTimeline({ events, isLoading, error, onRetry }: Props) {
-  if (isLoading) return <p className='text-slate-600'>Hämtar kalendern …</p>;
+  if (isLoading) {
+    return (
+      <p role='status' className='text-slate-600'>
+        Hämtar kalendern …
+      </p>
+    );
+  }
 
   if (error) {
     return (
-      <div className='rounded-lg border border-slate-200 bg-white p-6'>
+      <div role='alert' className='rounded-lg border border-slate-200 bg-white p-6'>
         <p>{error}</p>
         <button type='button' onClick={onRetry} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
           Försök igen
@@ -39,10 +45,4 @@ export default function EventTimeline({ events, isLoading, error, onRetry }: Pro
       ))}
     </div>
   );
-}
-
-const shortDateFormat = new Intl.DateTimeFormat('sv-SE', { day: 'numeric', month: 'short', timeZone: 'UTC' });
-
-function shortDate(day: string): string {
-  return shortDateFormat.format(new Date(`${day}T12:00:00Z`)).replace('.', '');
 }
