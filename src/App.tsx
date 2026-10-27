@@ -1,8 +1,13 @@
+import DemoBanner from './components/DemoBanner';
 import Header from './components/Header';
+import { readCalendarSettings } from './services/calendarSettings';
+
+const isDemo = readCalendarSettings(import.meta.env) === null;
 
 export default function App() {
   return (
     <>
+      {isDemo && <DemoBanner />}
       <Header />
       <main className='mx-auto grid max-w-6xl gap-6 px-4 py-6 lg:grid-cols-3'>
         {/* Platshållarna ersätts av tidslinjen (#11) och sidopanelen (#18). */}
