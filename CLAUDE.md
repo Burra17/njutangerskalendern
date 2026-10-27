@@ -37,7 +37,7 @@ Den som lägger in händelser ska bara behöva skriva en vanlig titel. Det här 
 
 ## Versioner
 
-`.nvmrc` låser Node och `yarn.lock` låser paketen. Pakethanteraren är yarn, så att `yarn.lock` förblir den enda lockfilen.
+`.nvmrc` låser Node lokalt och i CI, och `engines` i `package.json` gör samma sak för Vercel, som inte läser `.nvmrc`. `yarn.lock` låser paketen. Pakethanteraren är yarn, så att `yarn.lock` förblir den enda lockfilen.
 
 ## Arbetsflöde
 
