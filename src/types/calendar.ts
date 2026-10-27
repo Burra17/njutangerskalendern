@@ -1,3 +1,5 @@
+import type { CategoryId } from '../utils/categoryParser';
+
 // Ett datum utan tid, 'YYYY-MM-DD'. Heldagar hålls som sådana hela vägen, så att de aldrig hamnar på fel dag.
 export type IsoDate = string;
 
@@ -13,8 +15,6 @@ export type GoogleCalendarEvent = {
 
 // Heldagar har date, tidsatta händelser har dateTime med tidszonsförskjutning. Heldagens end är exklusivt.
 export type GoogleEventTime = { date: IsoDate } | { dateTime: string; timeZone?: string };
-
-export type CategoryId = 'fika' | 'natur' | 'loppis' | 'moten' | 'idrott' | 'ovrigt';
 
 // Det appen använder för en händelse.
 export type CalendarEvent = {
