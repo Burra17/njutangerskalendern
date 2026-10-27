@@ -35,36 +35,26 @@ export default function EventTimeline({ events, query, onClearQuery, isLoading, 
     );
   }
 
-  const searching = query.trim() !== '';
+  const search = query.trim();
 
   // Raden för skärmläsare står kvar mellan sökningarna, så att varje ny träffbild läses upp.
   return (
     <>
       <p role='status' className='sr-only'>
-        {searching && matchCount(events.length)}
+        {search && matchCount(events.length)}
       </p>
-      <Events events={events} query={query.trim()} searching={searching} onClearQuery={onClearQuery} now={now} />
+      <EventList events={events} search={search} onClearQuery={onClearQuery} now={now} />
     </>
   );
 }
 
-function Events({
-  events,
-  query,
-  searching,
-  onClearQuery,
-  now,
-}: {
-  events: CalendarEvent[];
-  query: string;
-  searching: boolean;
-  onClearQuery: () => void;
-  now: Date;
-}) {
-  if (events.length === 0 && searching) {
+type EventListProps = { events: CalendarEvent[]; search: string; onClearQuery: () => void; now: Date };
+
+function EventList({ events, search, onClearQuery, now }: EventListProps) {
+  if (events.length === 0 && search) {
     return (
       <div className='rounded-lg border border-slate-200 bg-white p-6'>
-        <p>Inget matchar ”{query}”.</p>
+        <p>Inget matchar ”{search}”.</p>
         <button type='button' onClick={onClearQuery} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
           Rensa sökningen
         </button>

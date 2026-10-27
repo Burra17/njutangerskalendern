@@ -23,7 +23,7 @@ export default function FilterBar({ query, onQueryChange, onClear, searchRef }: 
           {query && (
             <button
               type='button'
-              aria-label='Rensa sökningen'
+              aria-label='Töm sökfältet'
               onClick={onClear}
               className='absolute top-1/2 right-1 flex size-9 -translate-y-1/2 items-center justify-center rounded-md text-slate-500 hover:bg-slate-200 hover:text-slate-800'
             >

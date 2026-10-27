@@ -62,18 +62,17 @@ describe('sökningen', () => {
     expect(screen.getByText('Inget matchar ”kräftskiva”.')).toBeTruthy();
     expect(months()).toEqual([]);
 
-    // Både krysset och knappen i meddelandet heter Rensa sökningen. Det här är knappen med synlig text.
-    fireEvent.click(screen.getByText('Rensa sökningen'));
+    fireEvent.click(screen.getByRole('button', { name: 'Rensa sökningen' }));
     expect(months()).toEqual(['Oktober 2026', 'November 2026']);
     expect(document.activeElement).toBe(screen.getByRole('searchbox'));
   });
 
   test('krysset i sökfältet rensar och syns bara när det finns text', () => {
     render(<App />);
-    expect(screen.queryByRole('button', { name: 'Rensa sökningen' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Töm sökfältet' })).toBeNull();
 
     search('gympa');
-    fireEvent.click(screen.getByRole('button', { name: 'Rensa sökningen' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Töm sökfältet' }));
     expect((screen.getByRole('searchbox') as HTMLInputElement).value).toBe('');
     expect(months()).toEqual(['Oktober 2026', 'November 2026']);
   });

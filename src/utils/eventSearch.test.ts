@@ -56,7 +56,7 @@ describe('searchEvents', () => {
   });
 
   test('ö skrivet som o plus prickar hittar ändå', () => {
-    expect(ids('årsmöte')).toEqual(['mote']);
+    expect(ids('a\u030Arsmo\u0308te')).toEqual(['mote']);
   });
 
   test('behåller ordningen', () => {
