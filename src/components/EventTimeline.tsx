@@ -3,9 +3,16 @@ import type { CalendarEvent } from '../types/calendar';
 import { groupByMonth } from '../utils/monthGroups';
 import EventCard from './EventCard';
 
-type Props = { events: CalendarEvent[]; isLoading: boolean; error: string | null; onRetry: () => void };
+type Props = {
+  events: CalendarEvent[];
+  query: string;
+  onClearQuery: () => void;
+  isLoading: boolean;
+  error: string | null;
+  onRetry: () => void;
+};
 
-export default function EventTimeline({ events, isLoading, error, onRetry }: Props) {
+export default function EventTimeline({ events, query, onClearQuery, isLoading, error, onRetry }: Props) {
   // Idag och Pågår räknas fram när sidan visas. Ingen klocka uppdaterar dem medan sidan står öppen (beslut i #10).
   const [now] = useState(() => new Date());
 
@@ -23,6 +30,43 @@ export default function EventTimeline({ events, isLoading, error, onRetry }: Pro
         <p>{error}</p>
         <button type='button' onClick={onRetry} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
           Försök igen
+        </button>
+      </div>
+    );
+  }
+
+  const searching = query.trim() !== '';
+
+  // Raden för skärmläsare står kvar mellan sökningarna, så att varje ny träffbild läses upp.
+  return (
+    <>
+      <p role='status' className='sr-only'>
+        {searching && matchCount(events.length)}
+      </p>
+      <Events events={events} query={query.trim()} searching={searching} onClearQuery={onClearQuery} now={now} />
+    </>
+  );
+}
+
+function Events({
+  events,
+  query,
+  searching,
+  onClearQuery,
+  now,
+}: {
+  events: CalendarEvent[];
+  query: string;
+  searching: boolean;
+  onClearQuery: () => void;
+  now: Date;
+}) {
+  if (events.length === 0 && searching) {
+    return (
+      <div className='rounded-lg border border-slate-200 bg-white p-6'>
+        <p>Inget matchar ”{query}”.</p>
+        <button type='button' onClick={onClearQuery} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
+          Rensa sökningen
         </button>
       </div>
     );
@@ -52,4 +96,9 @@ export default function EventTimeline({ events, isLoading, error, onRetry }: Pro
       ))}
     </div>
   );
+}
+
+function matchCount(count: number): string {
+  if (count === 0) return 'Inga händelser matchar.';
+  return count === 1 ? '1 händelse matchar.' : `${count} händelser matchar.`;
 }
