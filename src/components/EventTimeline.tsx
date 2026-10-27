@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
+import { categoryById, type CategoryId } from '../utils/categoryParser';
 import { groupByMonth } from '../utils/monthGroups';
 import EventCard from './EventCard';
 
 type Props = {
   events: CalendarEvent[];
   query: string;
-  onClearQuery: () => void;
+  category: CategoryId | null;
+  onShowAll: () => void;
   isLoading: boolean;
   error: string | null;
   onRetry: () => void;
 };
 
-export default function EventTimeline({ events, query, onClearQuery, isLoading, error, onRetry }: Props) {
+export default function EventTimeline({ events, query, category, onShowAll, isLoading, error, onRetry }: Props) {
   // Idag och Pågår räknas fram när sidan visas. Ingen klocka uppdaterar dem medan sidan står öppen (beslut i #10).
   const [now] = useState(() => new Date());
 
@@ -36,27 +38,28 @@ export default function EventTimeline({ events, query, onClearQuery, isLoading, 
   }
 
   const search = query.trim();
+  const categoryLabel = category && categoryById(category).label;
 
   // Raden för skärmläsare står kvar mellan sökningarna, så att varje ny träffbild läses upp.
   return (
     <>
       <p role='status' className='sr-only'>
-        {search && matchCount(events.length)}
+        {(search || categoryLabel) && matchCount(events.length)}
       </p>
-      <EventList events={events} search={search} onClearQuery={onClearQuery} now={now} />
+      <EventList events={events} search={search} categoryLabel={categoryLabel} onShowAll={onShowAll} now={now} />
     </>
   );
 }
 
-type EventListProps = { events: CalendarEvent[]; search: string; onClearQuery: () => void; now: Date };
+type EventListProps = { events: CalendarEvent[]; search: string; categoryLabel: string | null; onShowAll: () => void; now: Date };
 
-function EventList({ events, search, onClearQuery, now }: EventListProps) {
-  if (events.length === 0 && search) {
+function EventList({ events, search, categoryLabel, onShowAll, now }: EventListProps) {
+  if (events.length === 0 && (search || categoryLabel)) {
     return (
       <div className='rounded-lg border border-slate-200 bg-white p-6'>
-        <p>Inget matchar ”{search}”.</p>
-        <button type='button' onClick={onClearQuery} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
-          Rensa sökningen
+        <p>{noMatchText(search, categoryLabel)}</p>
+        <button type='button' onClick={onShowAll} className='mt-4 rounded-md bg-emerald-800 px-4 py-2 font-medium text-white hover:bg-emerald-900'>
+          {categoryLabel ? 'Visa allt' : 'Rensa sökningen'}
         </button>
       </div>
     );
@@ -86,6 +89,11 @@ function EventList({ events, search, onClearQuery, now }: EventListProps) {
       ))}
     </div>
   );
+}
+
+function noMatchText(search: string, categoryLabel: string | null): string {
+  if (!categoryLabel) return `Inget matchar ”${search}”.`;
+  return search ? `Inget matchar ”${search}” i ${categoryLabel}.` : `Inget inplanerat i ${categoryLabel} just nu.`;
 }
 
 function matchCount(count: number): string {
