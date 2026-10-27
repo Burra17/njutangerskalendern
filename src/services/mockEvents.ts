@@ -109,6 +109,15 @@ export function createMockEvents(now = new Date()): GoogleCalendarEvent[] {
       location: 'Skolan',
       ...allDay(78),
     },
+    // En veckoaktivitet, som Google skickar som ett tillfälle per vecka med samma recurringEventId.
+    ...[1, 8, 15, 22].map((daysFromToday) => ({
+      id: `mock-14_${daysFromToday}`,
+      recurringEventId: 'mock-14',
+      summary: 'Gympa för seniorer',
+      description: 'Lugn gympa till musik. Alla nivåer är välkomna.',
+      location: 'Skolans gymnastiksal',
+      ...timed(daysFromToday, '10:00', '11:00'),
+    })),
   ];
 }
 

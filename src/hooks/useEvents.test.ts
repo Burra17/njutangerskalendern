@@ -27,7 +27,9 @@ describe('useEvents', () => {
     const { result } = renderHook(() => useEvents());
 
     expect(result.current).toMatchObject({ isDemo: true, isLoading: false, error: null });
-    expect(result.current.events).toHaveLength(13);
+    // 13 enstaka händelser och en veckoaktivitet med fyra tillfällen, som blir ett kort.
+    expect(result.current.events).toHaveLength(14);
+    expect(result.current.events.find((event) => event.series)?.series?.later).toHaveLength(3);
   });
 
   test('laddar händelserna från Google', async () => {

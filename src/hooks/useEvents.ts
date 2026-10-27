@@ -4,6 +4,7 @@ import { readCalendarSettings } from '../services/calendarSettings';
 import { toCalendarEvent } from '../services/eventMapper';
 import { createMockEvents } from '../services/mockEvents';
 import type { CalendarEvent } from '../types/calendar';
+import { mergeSeries } from '../utils/recurringSeries';
 
 export type EventsState = { events: CalendarEvent[]; isLoading: boolean; error: string | null; isDemo: boolean; retry: () => void };
 
@@ -12,7 +13,7 @@ const ERROR_MESSAGE = 'Kalendern gick inte att hämta just nu.';
 const settings = readCalendarSettings(import.meta.env);
 
 export function useEvents(): EventsState {
-  const mockEvents = useMemo(() => (settings ? null : createMockEvents().map(toCalendarEvent)), []);
+  const mockEvents = useMemo(() => (settings ? null : mergeSeries(createMockEvents().map(toCalendarEvent))), []);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [isLoading, setIsLoading] = useState(settings !== null);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,7 @@ export function useEvents(): EventsState {
     // fetch slås in, eftersom webbläsaren kastar ett fel när den anropas lösryckt från window.
     loadEvents(settings, { fetch: (url) => fetch(url), storage: sessionStorageOrNothing(), now: new Date() })
       .then((loaded) => {
-        if (active) setEvents(loaded);
+        if (active) setEvents(mergeSeries(loaded));
       })
       .catch((reason: unknown) => {
         // Byborna får ett och samma meddelande. Detaljerna, som fel nyckel eller nätverk, hamnar i konsolen.

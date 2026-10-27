@@ -35,7 +35,7 @@ describe('loadEvents', () => {
       singleEvents: 'true',
       orderBy: 'startTime',
       maxResults: '250',
-      fields: 'items(id,summary,description,location,start,end)',
+      fields: 'items(id,recurringEventId,summary,description,location,start,end)',
     });
   });
 
@@ -77,12 +77,20 @@ describe('loadEvents', () => {
     const fetch = fakeFetch([fika]);
     const events = await loadEvents(settings, {
       fetch,
-      storage: fakeStorage({ 'njutangerskalendern:events:abc@group.calendar.google.com': raw }),
+      storage: fakeStorage({ 'njutangerskalendern:events:v2:abc@group.calendar.google.com': raw }),
       now,
     });
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(events).toHaveLength(1);
+  });
+
+  test('använder inte en cache från en äldre version, som saknar fält som hämtas nu', async () => {
+    const fetch = fakeFetch([fika]);
+    const old = JSON.stringify({ savedAt: now.getTime(), items: [] });
+    await loadEvents(settings, { fetch, storage: fakeStorage({ 'njutangerskalendern:events:abc@group.calendar.google.com': old }), now });
+
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   test('använder inte en annan kalenders cache', async () => {

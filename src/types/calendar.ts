@@ -6,6 +6,8 @@ export type IsoDate = string;
 // Det Google Calendar API skickar för en händelse. Bara fälten appen använder.
 export type GoogleCalendarEvent = {
   id: string;
+  // Finns på varje tillfälle i en återkommande serie, och är samma för hela serien.
+  recurringEventId?: string;
   summary?: string;
   description?: string;
   location?: string;
@@ -24,6 +26,11 @@ export type CalendarEvent = {
   location?: string;
   organizer?: string;
   category: CategoryId;
+  // Googles recurringEventId, samma för alla tillfällen i en serie. Används för att slå ihop dem.
+  seriesId?: string;
+  // Finns när en återkommande serie har slagits ihop till sitt nästa tillfälle.
+  // later innehåller alla följande tillfällen. Kortet visar de tre första.
+  series?: { rule: string; later: EventTiming[] };
 } & EventTiming;
 
 // endDate är heldagens sista dag, till skillnad från Googles exklusiva slutdatum.

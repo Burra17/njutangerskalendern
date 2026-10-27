@@ -15,12 +15,14 @@ const DAYS_AHEAD = 183;
 const MAX_RESULTS = 250;
 
 const CACHE_MS = 10 * 60_000;
+// Höjs när fields ändras, så att en cache som saknar de nya fälten inte används efter en deploy.
+const CACHE_VERSION = 'v2';
 
 // Rådata från Google sparas, inte färdiga händelser: Date överlever inte JSON, och en ändrad omvandling slår då igenom direkt.
 type CachedResponse = { savedAt: number; items: GoogleCalendarEvent[] };
 
 export async function loadEvents(settings: CalendarSettings, { fetch, storage, now }: LoadDeps): Promise<CalendarEvent[]> {
-  const cacheKey = `njutangerskalendern:events:${settings.calendarId}`;
+  const cacheKey = `njutangerskalendern:events:${CACHE_VERSION}:${settings.calendarId}`;
   const cached = readCache(storage.getItem(cacheKey), now);
   if (cached) return toCalendarEvents(cached);
 
@@ -71,7 +73,7 @@ function eventsUrl({ apiKey, calendarId }: CalendarSettings, now: Date): string 
     singleEvents: 'true',
     orderBy: 'startTime',
     maxResults: String(MAX_RESULTS),
-    fields: 'items(id,summary,description,location,start,end)',
+    fields: 'items(id,recurringEventId,summary,description,location,start,end)',
   }).toString();
   return url.toString();
 }
