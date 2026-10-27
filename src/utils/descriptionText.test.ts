@@ -9,6 +9,7 @@ describe('extractOrganizer', () => {
 
   test('lämnar ingen tom rad där raden satt', () => {
     expect(extractOrganizer('Rad ett\nArrangör: Byalaget\nRad två').text).toBe('Rad ett\nRad två');
+    expect(extractOrganizer('Rad ett\n\nArrangör: Byalaget\n\nRad två').text).toBe('Rad ett\n\nRad två');
   });
 
   test('tål små bokstäver och mellanslag runt kolonet', () => {
@@ -58,6 +59,15 @@ describe('toPlainText', () => {
     expect(toPlainText('Kaffe &amp; bulle&nbsp;20&nbsp;kr, &quot;fika&quot; &lt;3 &#39;välkommen&#39; &#8211; &#x2764;')).toBe(
       'Kaffe & bulle 20 kr, "fika" <3 \'välkommen\' – ❤',
     );
+  });
+
+  test('avkodar svenska bokstäver och lämnar trasiga entiteter orörda', () => {
+    expect(toPlainText('Arrang&ouml;r: Byalaget, &Aring;sa &auml;r d&auml;r')).toBe('Arrangör: Byalaget, Åsa är där');
+    expect(toPlainText('Trasig &#99999999; och &okänd;')).toBe('Trasig &#99999999; och &okänd;');
+  });
+
+  test('gör Windows-radbrytningar till vanliga', () => {
+    expect(toPlainText('Rad ett\r\n\r\n\r\n\r\nRad två')).toBe('Rad ett\n\nRad två');
   });
 
   test('slår ihop flera tomma rader till en', () => {

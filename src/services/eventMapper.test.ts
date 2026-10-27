@@ -22,8 +22,29 @@ describe('mockdatan genom hela omvandlingen', () => {
     expect(byId('mock-3')).toMatchObject({ organizer: 'Badplatsgruppen', description: 'Ta med kratta och arbetshandskar. Korv bjuds på efteråt.' });
   });
 
-  test('byfesten pågår i tre dagar och planeringsmötet saknar plats', () => {
-    expect(byId('mock-8')).toMatchObject({ allDay: true, startDate: '2026-07-16', endDate: '2026-07-18', category: 'fika' });
+  test.each([
+    ['mock-1', 'fika', 'Fikagruppen'],
+    ['mock-2', 'moten', undefined],
+    ['mock-3', 'natur', 'Badplatsgruppen'],
+    ['mock-4', 'loppis', undefined],
+    ['mock-5', 'idrott', undefined],
+    ['mock-6', 'idrott', undefined],
+    ['mock-7', 'moten', undefined],
+    ['mock-8', 'fika', undefined],
+    ['mock-9', 'natur', undefined],
+    ['mock-10', 'ovrigt', undefined],
+    ['mock-11', 'loppis', 'Auktionsgruppen'],
+    ['mock-12', 'moten', undefined],
+    ['mock-13', 'loppis', undefined],
+  ])('%s får kategorin %s och arrangören %s', (id, category, organizer) => {
+    expect(byId(id)).toMatchObject({ category, organizer });
+  });
+
+  test('byfesten pågår i tre dagar', () => {
+    expect(byId('mock-8')).toMatchObject({ allDay: true, startDate: '2026-07-16', endDate: '2026-07-18' });
+  });
+
+  test('planeringsmötet saknar plats', () => {
     expect(byId('mock-12').location).toBeUndefined();
   });
 });
