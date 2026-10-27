@@ -1,7 +1,5 @@
 import type { CategoryId } from '../utils/categoryParser';
 
-export type { CategoryId };
-
 // Ett datum utan tid, 'YYYY-MM-DD'. Heldagar hålls som sådana hela vägen, så att de aldrig hamnar på fel dag.
 export type IsoDate = string;
 

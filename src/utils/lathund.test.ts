@@ -6,7 +6,7 @@ import { CATEGORIES } from './categoryParser';
 describe('docs/lathund.md', () => {
   test.each(CATEGORIES.map((category) => [category.label, category]))('tar upp %s', (_label, category) => {
     expect(lathund).toContain(category.label);
-    if (category.emoji) expect(lathund).toContain(category.emoji);
+    for (const emoji of category.emojis) expect(lathund).toContain(emoji);
     for (const keyword of category.keywords) expect(lathund).toContain(keyword);
   });
 

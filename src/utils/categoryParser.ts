@@ -72,9 +72,9 @@ function firstMatch(text: string): CategoryId | null {
   return best?.id ?? null;
 }
 
-// Variationstecknet U+FE0F finns med i vissa emojis från vissa tangentbord men inte från andra.
+// Tangentbord skriver ibland ö som o plus prickar, och vissa emojis med variationstecknet U+FE0F. Båda jämnas ut.
 function normalize(text: string): string {
-  return text.replaceAll('\u{FE0F}', '').toLowerCase();
+  return text.normalize('NFC').replaceAll('\u{FE0F}', '').toLowerCase();
 }
 
 // Korta nyckelord måste vara hela ord, så att "pub" inte hittas i "publik". \b fungerar inte med å, ä och ö, därav \p{L}.
