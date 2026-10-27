@@ -9,7 +9,7 @@ export default function App() {
         <section aria-label='Kommande händelser' className='rounded-lg border border-dashed border-slate-300 p-6 text-slate-500 lg:col-span-2'>
           Händelserna kommer här.
         </section>
-        <aside aria-label='Om kalendern' className='rounded-lg border border-dashed border-slate-300 p-6 text-slate-500'>
+        <aside aria-label='Sidopanel' className='rounded-lg border border-dashed border-slate-300 p-6 text-slate-500'>
           Sidopanelen kommer här.
         </aside>
       </main>
