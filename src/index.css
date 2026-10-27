@@ -1,1 +1,8 @@
 @import 'tailwindcss';
+
+/* 18 px brödtext, eftersom många läser i mobilen utan glasögon. */
+@layer base {
+  body {
+    @apply bg-slate-50 text-lg text-slate-900 antialiased;
+  }
+}
