@@ -1,0 +1,4 @@
+interface ImportMetaEnv {
+  readonly VITE_GOOGLE_API_KEY?: string;
+  readonly VITE_GOOGLE_CALENDAR_ID?: string;
+}
