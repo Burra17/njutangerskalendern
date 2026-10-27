@@ -26,6 +26,11 @@ describe('categorize', () => {
     expect(categorize('Fixardag')).toBe('natur');
   });
 
+  test('matchar å, ä och ö även när de är skrivna som bokstav plus prickar', () => {
+    expect(categorize('Möte i bygdegården')).toBe('moten');
+    expect(categorize('Vårstädning')).toBe('natur');
+  });
+
   test('korta nyckelord måste vara hela ord', () => {
     expect(categorize('Pub i bygdegården')).toBe('fika');
     expect(categorize('Quiz på puben')).toBe('ovrigt');
