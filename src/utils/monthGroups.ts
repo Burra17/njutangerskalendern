@@ -1,5 +1,5 @@
 import type { CalendarEvent } from '../types/calendar';
-import { noonUtc, startDay, stockholmMidnight } from './dates';
+import { monthKey, noonUtc, startDay, stockholmMidnight } from './dates';
 
 export type MonthGroup = { key: string; title: string; events: CalendarEvent[] };
 
@@ -10,7 +10,7 @@ export function groupByMonth(events: CalendarEvent[]): MonthGroup[] {
   const groups: MonthGroup[] = [];
   // Sorteras här, eftersom ett seriekort och mockdatan inte alltid kommer i ordning.
   for (const event of [...events].sort((a, b) => startTime(a) - startTime(b))) {
-    const key = startDay(event).slice(0, 7);
+    const key = monthKey(startDay(event));
     if (groups.at(-1)?.key !== key) groups.push({ key, title: monthTitle(key), events: [] });
     groups.at(-1)!.events.push(event);
   }

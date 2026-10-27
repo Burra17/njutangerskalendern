@@ -1,4 +1,4 @@
-import type { CalendarEvent, IsoDate } from '../types/calendar';
+import type { EventTiming, IsoDate } from '../types/calendar';
 
 export const STOCKHOLM = 'Europe/Stockholm';
 
@@ -22,9 +22,18 @@ export function toStockholmDate(instant: Date): IsoDate {
   return isoDateFormat.format(instant);
 }
 
-// Dagen en händelse börjar, i svensk tid.
-export function startDay(event: CalendarEvent): IsoDate {
+// Dagen en händelse eller ett tillfälle börjar, i svensk tid.
+export function startDay(event: EventTiming): IsoDate {
   return event.allDay ? event.startDate : toStockholmDate(event.start);
+}
+
+// 'YYYY-MM', som grupperar och jämför månader.
+export function monthKey(date: IsoDate): string {
+  return date.slice(0, 7);
+}
+
+export function dayOfMonth(date: IsoDate): number {
+  return Number(date.slice(8, 10));
 }
 
 export function addDays(date: IsoDate, days: number): IsoDate {

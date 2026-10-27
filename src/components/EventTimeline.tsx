@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
-import { shortDate, startDay } from '../utils/dates';
 import { groupByMonth } from '../utils/monthGroups';
+import EventCard from './EventCard';
 
 type Props = { events: CalendarEvent[]; isLoading: boolean; error: string | null; onRetry: () => void };
 
 export default function EventTimeline({ events, isLoading, error, onRetry }: Props) {
+  // Idag och Pågår räknas fram när sidan visas. Ingen klocka uppdaterar dem medan sidan står öppen (beslut i #10).
+  const [now] = useState(() => new Date());
+
   if (isLoading) {
     return (
       <p role='status' className='text-slate-600'>
@@ -30,15 +34,18 @@ export default function EventTimeline({ events, isLoading, error, onRetry }: Pro
     <div className='space-y-8'>
       {groupByMonth(events).map((group) => (
         <section key={group.key} aria-labelledby={`month-${group.key}`}>
-          <h2 id={`month-${group.key}`} className='mb-3 text-xl font-bold text-slate-900'>
-            {group.title}
-          </h2>
-          <ul className='space-y-2'>
+          <div className='mb-4 flex items-center gap-3'>
+            <h2
+              id={`month-${group.key}`}
+              className='rounded-md border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-bold tracking-wider text-emerald-800 uppercase'
+            >
+              {group.title}
+            </h2>
+            <span aria-hidden className='h-px flex-1 bg-slate-200' />
+          </div>
+          <ul className='space-y-3'>
             {group.events.map((event) => (
-              // Platshållare tills de riktiga korten kommer i #12.
-              <li key={event.id} className='rounded-lg border border-slate-200 bg-white px-4 py-3'>
-                {`${shortDate(startDay(event))} · ${event.title}`}
-              </li>
+              <EventCard key={event.id} event={event} now={now} />
             ))}
           </ul>
         </section>
