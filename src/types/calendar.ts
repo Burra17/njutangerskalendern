@@ -26,8 +26,10 @@ export type CalendarEvent = {
   location?: string;
   organizer?: string;
   category: CategoryId;
+  // Googles recurringEventId, samma för alla tillfällen i en serie. Används för att slå ihop dem.
   seriesId?: string;
   // Finns när en återkommande serie har slagits ihop till sitt nästa tillfälle.
+  // later innehåller alla följande tillfällen. Kortet visar de tre första.
   series?: { rule: string; later: EventTiming[] };
 } & EventTiming;
 

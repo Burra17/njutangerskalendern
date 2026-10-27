@@ -28,8 +28,10 @@ const DAY_MS = 24 * 60 * 60_000;
 function ruleFor(days: IsoDate[]): string {
   const gaps = days.slice(1).map((day, index) => (Date.parse(day) - Date.parse(days[index])) / DAY_MS);
   const weekday = weekdayFormat.format(new Date(`${days[0]}T12:00:00Z`));
-  if (gaps.every((gap) => gap === 7)) return `Varje ${weekday}`;
-  if (gaps.every((gap) => gap === 14)) return `Varannan ${weekday}`;
+  // Det minsta avståndet avgör, så att en inställd vecka inte gör "Varje tisdag" till "Återkommer".
+  const smallest = Math.min(...gaps);
+  if (smallest === 7 && gaps.every((gap) => gap % 7 === 0)) return `Varje ${weekday}`;
+  if (smallest === 14 && gaps.every((gap) => gap % 14 === 0)) return `Varannan ${weekday}`;
   return 'Återkommer';
 }
 

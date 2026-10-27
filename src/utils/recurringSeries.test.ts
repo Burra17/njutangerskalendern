@@ -18,6 +18,13 @@ describe('mergeSeries', () => {
     ['varannan vecka', 'Varannan söndag', ['2026-11-01T12:00:00Z', '2026-11-15T12:00:00Z', '2026-11-29T12:00:00Z']],
     ['oregelbundet', 'Återkommer', ['2026-10-27T14:30:00Z', '2026-11-03T14:30:00Z', '2026-11-05T14:30:00Z']],
     ['varje dag', 'Återkommer', ['2026-10-27T06:00:00Z', '2026-10-28T06:00:00Z']],
+    [
+      'varje vecka med en inställd vecka',
+      'Varje tisdag',
+      ['2026-12-15T14:30:00Z', '2026-12-22T14:30:00Z', '2027-01-05T14:30:00Z', '2027-01-12T14:30:00Z'],
+    ],
+    ['varannan vecka med ett uppehåll', 'Varannan söndag', ['2026-11-01T12:00:00Z', '2026-11-15T12:00:00Z', '2026-12-13T12:00:00Z']],
+    ['varje vecka med ett flyttat tillfälle', 'Återkommer', ['2026-10-27T14:30:00Z', '2026-11-04T14:30:00Z', '2026-11-10T14:30:00Z']],
   ])('en serie som återkommer %s får regeln "%s"', (_name, rule, starts) => {
     const merged = mergeSeries(starts.map((start, index) => timed(`s_${index}`, start, 's')));
     expect(merged[0].series?.rule).toBe(rule);
@@ -53,6 +60,7 @@ describe('mergeSeries', () => {
     ]);
 
     expect(merged.map((event) => event.id)).toEqual(['gympa_1', 'fika']);
+    expect(merged[1]).toEqual(timed('fika', '2026-10-28T14:30:00Z'));
     expect(merged[0].series?.later).toEqual([
       expect.objectContaining({ start: new Date('2026-11-03T14:30:00Z') }),
       expect.objectContaining({ start: new Date('2026-11-10T14:30:00Z') }),
