@@ -77,3 +77,50 @@ describe('sökningen', () => {
     expect(months()).toEqual(['Oktober 2026', 'November 2026']);
   });
 });
+
+describe('kategorifiltret', () => {
+  function pill(name: string) {
+    return screen.getByRole('button', { name });
+  }
+
+  test('visar bara vald kategori och fungerar tillsammans med sökningen', () => {
+    render(<App />);
+    expect(pill('Alla').getAttribute('aria-pressed')).toBe('true');
+
+    fireEvent.click(pill('Fika & Gemenskap'));
+    expect(pill('Fika & Gemenskap').getAttribute('aria-pressed')).toBe('true');
+    expect(pill('Alla').getAttribute('aria-pressed')).toBe('false');
+    expect(months()).toEqual(['November 2026']);
+    expect(screen.getByText('1 händelse matchar.')).toBeTruthy();
+
+    // Sökningen letar bara inom vald kategori, så loppisen i bygdegården syns inte.
+    search('bygdegården');
+    expect(screen.getByRole('button', { name: 'TEST Fika' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'TEST Loppis' })).toBeNull();
+
+    fireEvent.click(pill('Alla'));
+    expect(screen.getByRole('button', { name: 'TEST Loppis' })).toBeTruthy();
+    expect(screen.getByText('2 händelser matchar.')).toBeTruthy();
+  });
+
+  test('säger till när kategorin är tom, och Visa allt tömmer filtret', () => {
+    render(<App />);
+    fireEvent.click(pill('Natur & Fix'));
+
+    expect(screen.getByText('Inget inplanerat i Natur & Fix just nu.')).toBeTruthy();
+    fireEvent.click(pill('Visa allt'));
+    expect(months()).toEqual(['Oktober 2026', 'November 2026']);
+    expect(pill('Alla').getAttribute('aria-pressed')).toBe('true');
+  });
+
+  test('säger till när sökningen inte hittar något i kategorin, och Visa allt tömmer båda', () => {
+    render(<App />);
+    fireEvent.click(pill('Idrott & Motion'));
+    search('loppis');
+
+    expect(screen.getByText('Inget matchar ”loppis” i Idrott & Motion.')).toBeTruthy();
+    fireEvent.click(pill('Visa allt'));
+    expect((screen.getByRole('searchbox') as HTMLInputElement).value).toBe('');
+    expect(months()).toEqual(['Oktober 2026', 'November 2026']);
+  });
+});
