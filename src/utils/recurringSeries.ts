@@ -1,5 +1,5 @@
 import type { CalendarEvent, EventTiming, IsoDate } from '../types/calendar';
-import { STOCKHOLM, toStockholmDate } from './dates';
+import { STOCKHOLM, startDay } from './dates';
 
 // Varje serie visas som ett kort: dess första tillfälle, med de följande tillfällena i series.later.
 export function mergeSeries(events: CalendarEvent[]): CalendarEvent[] {
@@ -33,8 +33,4 @@ function ruleFor(days: IsoDate[]): string {
   if (smallest === 7 && gaps.every((gap) => gap % 7 === 0)) return `Varje ${weekday}`;
   if (smallest === 14 && gaps.every((gap) => gap % 14 === 0)) return `Varannan ${weekday}`;
   return 'Återkommer';
-}
-
-function startDay(event: CalendarEvent): IsoDate {
-  return event.allDay ? event.startDate : toStockholmDate(event.start);
 }

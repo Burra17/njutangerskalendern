@@ -1,4 +1,4 @@
-import type { IsoDate } from '../types/calendar';
+import type { CalendarEvent, IsoDate } from '../types/calendar';
 
 export const STOCKHOLM = 'Europe/Stockholm';
 
@@ -8,6 +8,11 @@ const offsetFormat = new Intl.DateTimeFormat('en-US', { timeZone: STOCKHOLM, tim
 
 export function toStockholmDate(instant: Date): IsoDate {
   return isoDateFormat.format(instant);
+}
+
+// Dagen en händelse börjar, i svensk tid.
+export function startDay(event: CalendarEvent): IsoDate {
+  return event.allDay ? event.startDate : toStockholmDate(event.start);
 }
 
 export function addDays(date: IsoDate, days: number): IsoDate {
