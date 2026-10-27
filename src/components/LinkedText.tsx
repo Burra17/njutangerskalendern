@@ -1,6 +1,6 @@
 import { linkify } from '../utils/linkify';
 
-// Texten från kalendern renderas alltid som text. Länkarna byggs som riktiga <a>, aldrig med innerHTML.
+// Texten från kalendern renderas som text, och länkarna byggs som riktiga <a>. Aldrig innerHTML.
 export default function LinkedText({ text }: { text: string }) {
   return linkify(text).map((part, index) =>
     part.href ? (

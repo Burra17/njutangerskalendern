@@ -1,8 +1,8 @@
 import { ChevronDown, ChevronRight, Clock, MapPin, Repeat } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
-import { CATEGORIES } from '../utils/categoryParser';
-import { alsoOn, dateBadge, shortPlace, timeRange, type DateBadge } from '../utils/eventFormat';
+import { categoryById } from '../utils/categoryParser';
+import { alsoOn, dateBadge, firstLine, shortPlace, timeRange, type DateBadge } from '../utils/eventFormat';
 import LinkedText from './LinkedText';
 
 const BADGE_STYLES: Record<DateBadge['level'], { box: string; label: string }> = {
@@ -13,27 +13,39 @@ const BADGE_STYLES: Record<DateBadge['level'], { box: string; label: string }> =
 
 export default function EventCard({ event, now }: { event: CalendarEvent; now: Date }) {
   const [open, setOpen] = useState(false);
-  const category = CATEGORIES.find((candidate) => candidate.id === event.category) ?? CATEGORIES.at(-1)!;
+  const category = categoryById(event.category);
+  const titleId = useId();
+  const metaId = useId();
   const badge = dateBadge(event, now);
   const badgeStyle = BADGE_STYLES[badge.level];
   const fullPlaceDiffers = event.location && event.location !== shortPlace(event.location);
 
   return (
     <li className={`rounded-xl border bg-white shadow-sm transition-shadow hover:shadow-md ${open ? 'border-emerald-300' : 'border-slate-200'}`}>
-      <button type='button' aria-expanded={open} onClick={() => setOpen(!open)} className='flex w-full gap-4 rounded-xl p-4 text-left'>
+      {/* Namnet är bara titeln, och tid och plats blir beskrivning, så att skärmläsaren inte läser hela kortet som namn. */}
+      <button
+        type='button'
+        aria-expanded={open}
+        aria-labelledby={titleId}
+        aria-describedby={metaId}
+        onClick={() => setOpen(!open)}
+        className='flex w-full gap-4 rounded-xl p-4 text-left'
+      >
         <div className={`flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-lg border ${badgeStyle.box}`}>
           <span className={`text-[11px] font-semibold tracking-tight uppercase ${badgeStyle.label}`}>{badge.label}</span>
           <span className='text-2xl leading-tight font-bold'>{badge.day}</span>
         </div>
         <div className='min-w-0 flex-1'>
           <span className={`inline-block rounded-md px-2 py-0.5 text-sm font-medium ${category.badgeClass}`}>{category.label}</span>
-          <h3 className='mt-1 text-lg leading-snug font-bold break-words text-slate-900'>{event.title}</h3>
-          <p className='mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-base text-slate-600'>
+          <h3 id={titleId} className='mt-1 text-lg leading-snug font-bold break-words text-slate-900'>
+            {event.title}
+          </h3>
+          <p id={metaId} className='mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-base text-slate-600'>
             <IconText icon={Clock} text={timeRange(event)} />
             {event.location && <IconText icon={MapPin} text={shortPlace(event.location)} />}
             {event.series && <IconText icon={Repeat} text={event.series.rule} />}
           </p>
-          {!open && event.description && <p className='mt-1 line-clamp-1 text-base text-slate-500'>{event.description.split('\n')[0]}</p>}
+          {!open && event.description && <p className='mt-1 line-clamp-1 text-base text-slate-500'>{firstLine(event.description)}</p>}
         </div>
         {open ? (
           <ChevronDown aria-hidden className='size-5 shrink-0 text-slate-400' />

@@ -24,8 +24,22 @@ describe('linkify', () => {
     ]);
   });
 
-  test('gör mejladresser klickbara', () => {
+  test('gör mejladresser klickbara, även med å, ä och ö', () => {
     expect(links('Mejla loppis@example.com.')).toEqual([{ text: 'loppis@example.com', href: 'mailto:loppis@example.com' }]);
+    expect(links('Mejla åsa@example.se')).toEqual([{ text: 'åsa@example.se', href: 'mailto:åsa@example.se' }]);
+    expect(links('Skriv till info@njutånger.se!')).toEqual([{ text: 'info@njutånger.se', href: 'mailto:info@njutånger.se' }]);
+  });
+
+  test('tar inte med citattecken efter adressen', () => {
+    expect(links('Se "https://example.com/a".')).toEqual([{ text: 'https://example.com/a', href: 'https://example.com/a' }]);
+    expect(links('Se ”https://example.com/b”')).toEqual([{ text: 'https://example.com/b', href: 'https://example.com/b' }]);
+  });
+
+  test('tar inte med ett datum eller årtal som står efter numret', () => {
+    expect(links('Ring 070-174 06 05 18 juni')).toEqual([{ text: '070-174 06 05', href: 'tel:0701740605' }]);
+    expect(links('Ring 0701740605 19 juni')).toEqual([{ text: '0701740605', href: 'tel:0701740605' }]);
+    expect(links('Ring 070-174 06 05 2026-10-28')).toEqual([{ text: '070-174 06 05', href: 'tel:0701740605' }]);
+    expect(links('Ring 0650-123 45 18 juni')).toEqual([{ text: '0650-123 45', href: 'tel:065012345' }]);
   });
 
   test.each([

@@ -52,6 +52,10 @@ export const CATEGORIES = [
 
 export type CategoryId = (typeof CATEGORIES)[number]['id'];
 
+export function categoryById(id: CategoryId) {
+  return CATEGORIES.find((category) => category.id === id) ?? CATEGORIES.find((category) => category.id === 'ovrigt')!;
+}
+
 // Titeln går först. Beskrivningen ska komma utan raden "Arrangör:", eftersom arrangören säger vem och inte vad.
 export function categorize(title: string, description = ''): CategoryId {
   return firstMatch(normalize(title)) ?? firstMatch(normalize(description)) ?? 'ovrigt';

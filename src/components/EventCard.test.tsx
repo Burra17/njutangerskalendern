@@ -42,7 +42,7 @@ function renderCard(event: CalendarEvent) {
       <EventCard event={event} now={now} />
     </ul>,
   );
-  return screen.getByRole('button', { name: new RegExp(event.title) });
+  return screen.getByRole('button', { name: event.title });
 }
 
 afterEach(cleanup);
@@ -83,6 +83,13 @@ describe('EventCard', () => {
 
     fireEvent.click(button);
     expect(screen.getByText('Även 3 nov, 10 nov och 17 nov.')).toBeTruthy();
+  });
+
+  test('skärmläsare får titeln som knappens namn och tid och plats som beskrivning', () => {
+    const button = renderCard(meeting);
+    expect(button.getAttribute('aria-describedby')).toBeTruthy();
+    const description = document.getElementById(button.getAttribute('aria-describedby')!);
+    expect(description?.textContent).toContain('15:00–16:00');
   });
 
   test('visar HTML i texten som text, aldrig som HTML', () => {
