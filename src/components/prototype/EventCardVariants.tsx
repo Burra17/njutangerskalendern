@@ -149,10 +149,18 @@ function GeminiCard({ event }: { event: CalendarEvent }) {
       <button type='button' aria-expanded={open} onClick={() => setOpen(!open)} className='flex w-full gap-4 p-4 text-left'>
         <div
           className={`flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-lg border ${
-            tile.highlight ? 'border-emerald-800 bg-emerald-800 text-white' : 'border-slate-200 bg-slate-50 text-slate-900'
+            tile.strong
+              ? 'border-emerald-800 bg-emerald-800 text-white'
+              : tile.highlight
+                ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
+                : 'border-slate-200 bg-slate-50 text-slate-900'
           }`}
         >
-          <span className={`text-[11px] font-semibold tracking-tight uppercase ${tile.highlight ? '' : 'text-slate-500'}`}>{tile.label}</span>
+          <span
+            className={`text-[11px] font-semibold tracking-tight uppercase ${tile.strong ? '' : tile.highlight ? 'text-emerald-800' : 'text-slate-500'}`}
+          >
+            {tile.label}
+          </span>
           <span className='text-2xl leading-tight font-bold'>{tile.day}</span>
         </div>
         <div className='min-w-0 flex-1'>
@@ -287,6 +295,8 @@ function dateTile(event: CalendarEvent) {
   return {
     label,
     highlight: ongoing || day === today || day === addDays(today, 1),
+    // Pågår och Idag väger tyngre än Imorgon.
+    strong: ongoing || day === today,
     day: Number(day.slice(8, 10)),
     month: monthShort.format(new Date(`${day}T12:00:00Z`)).replace('.', ''),
   };
