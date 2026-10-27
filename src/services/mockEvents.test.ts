@@ -22,6 +22,7 @@ describe('createMockEvents', () => {
     expect(events.some((event) => 'date' in event.start)).toBe(true);
     expect(events.some((event) => 'date' in event.start && 'date' in event.end && event.end.date > addDays(event.start.date, 1))).toBe(true);
     expect(events.some((event) => event.description?.includes('<br>'))).toBe(true);
+    expect(events.some((event) => event.description?.includes('</p>'))).toBe(true);
     expect(events.some((event) => event.description?.includes('\nArrangör: '))).toBe(true);
     expect(events.some((event) => !event.location)).toBe(true);
   });

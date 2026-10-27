@@ -20,5 +20,6 @@ export function addDays(date: IsoDate, days: number): IsoDate {
 // Stockholms förskjutning mot UTC den dagen, till exempel '+02:00'. Mitt på dagen, eftersom bytet sker på natten.
 export function stockholmOffset(date: IsoDate): string {
   const name = offsetFormat.formatToParts(new Date(`${date}T12:00:00Z`)).find((part) => part.type === 'timeZoneName')?.value;
-  return name?.replace('GMT', '') || '+00:00';
+  if (!name) throw new Error(`Hittade ingen tidszonsförskjutning för ${date}`);
+  return name.replace('GMT', '');
 }

@@ -1,8 +1,7 @@
 import type { GoogleCalendarEvent, GoogleEventTime, IsoDate } from '../types/calendar';
 import { addDays, STOCKHOLM, stockholmOffset, toStockholmDate } from '../utils/dates';
 
-// Påhittade händelser för demoläget, i samma format som Google skickar, så att de går genom samma omvandling som riktiga.
-// Datumen räknas från idag, så att demoläget aldrig blir tomt. Telefonnumren kommer från PTS serie för fiktion.
+// Påhittade händelser i Googles format, med datum från idag, så att demoläget aldrig blir tomt och går genom samma omvandling som riktiga.
 export function createMockEvents(now = new Date()): GoogleCalendarEvent[] {
   const today = toStockholmDate(now);
 
@@ -16,6 +15,7 @@ export function createMockEvents(now = new Date()): GoogleCalendarEvent[] {
     end: { date: addDays(today, daysFromToday + days) },
   });
 
+  // Telefonnumren kommer från PTS serie för fiktion, så att ingen riktig person blir uppringd.
   return [
     {
       id: 'mock-1',
@@ -78,7 +78,7 @@ export function createMockEvents(now = new Date()): GoogleCalendarEvent[] {
     {
       id: 'mock-9',
       summary: 'Vandring längs ån',
-      description: 'Ungefär 8 km i lugnt tempo. Ta med matsäck.',
+      description: '<p>Ungefär 8 km i lugnt tempo.</p><p>Ta med matsäck.</p>',
       location: 'Samling vid kyrkan',
       ...timed(35, '10:00', '13:00'),
     },
