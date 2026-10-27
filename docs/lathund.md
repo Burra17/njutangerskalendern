@@ -43,5 +43,5 @@ Raden visas längst ner på händelsens kort och tas bort från själva texten.
 
 - Webbadresser, mejladresser och telefonnummer i beskrivningen blir klickbara på sajten, så att man kan ringa direkt från mobilen.
 - En händelse som pågår flera dagar visas som ett enda kort, till exempel "19–21 jun".
-- Sajten visar händelser från och med idag.
+- Sajten visar händelser från och med idag och ungefär ett halvår framåt. Det som ligger längre fram syns när det kommer närmare.
 - Det kan ta upp till tio minuter innan en ändring syns för den som redan har sidan öppen.

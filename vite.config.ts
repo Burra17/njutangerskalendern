@@ -11,7 +11,7 @@ export default defineConfig({
     strictPort: true,
   },
   test: {
-    // Testerna gäller ren logik. jsdom läggs till av den ticket som först testar en komponent.
+    // Node som standard. Tester som behöver en DOM väljer jsdom med `// @vitest-environment jsdom` överst i filen.
     environment: 'node',
   },
 });

@@ -17,6 +17,11 @@ export function addDays(date: IsoDate, days: number): IsoDate {
   return day.toISOString().slice(0, 10);
 }
 
+// Midnatt i Stockholm, till exempel '2026-06-19T00:00:00+02:00'. Klockan ställs om kl. 02–03, så midnatt har gårdagens förskjutning.
+export function stockholmMidnight(date: IsoDate): string {
+  return `${date}T00:00:00${stockholmOffset(addDays(date, -1))}`;
+}
+
 // Stockholms förskjutning mot UTC den dagen, till exempel '+02:00'. Mitt på dagen, eftersom bytet sker på natten.
 export function stockholmOffset(date: IsoDate): string {
   const name = offsetFormat.formatToParts(new Date(`${date}T12:00:00Z`)).find((part) => part.type === 'timeZoneName')?.value;
