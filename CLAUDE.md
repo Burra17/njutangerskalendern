@@ -7,7 +7,7 @@ Originalspecen står i [docs/projektspecifikation.md](docs/projektspecifikation.
 ## Stack
 
 - Vite, React, TypeScript och Tailwind CSS. Ikoner från `lucide-react`.
-- Vitest för logiken i `utils/` och `services/`.
+- Vitest för logiken i `utils/` och `services/`, och Testing Library för hooks och komponenter. Tester som behöver en DOM börjar med `// @vitest-environment jsdom`, så att resten körs snabbt i Node.
 - Hostas på Vercel. `main` deployas automatiskt, och varje PR får en förhandsvisning.
 - Miljövariablerna `VITE_GOOGLE_API_KEY` och `VITE_GOOGLE_CALENDAR_ID`. Saknas någon av dem kör appen i demoläge med mockdata och en diskret banner.
 

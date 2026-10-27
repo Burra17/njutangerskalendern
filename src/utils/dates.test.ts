@@ -1,5 +1,17 @@
 import { describe, expect, test } from 'vitest';
-import { addDays, stockholmOffset, toStockholmDate } from './dates';
+import { addDays, stockholmMidnight, stockholmOffset, toStockholmDate } from './dates';
+
+describe('stockholmMidnight', () => {
+  test('ger midnatt med dagens förskjutning', () => {
+    expect(stockholmMidnight('2026-06-19')).toBe('2026-06-19T00:00:00+02:00');
+    expect(stockholmMidnight('2026-12-19')).toBe('2026-12-19T00:00:00+01:00');
+  });
+
+  test('ger rätt förskjutning de dagar klockan ställs om, eftersom midnatt kommer före omställningen', () => {
+    expect(stockholmMidnight('2026-03-29')).toBe('2026-03-29T00:00:00+01:00');
+    expect(stockholmMidnight('2026-10-25')).toBe('2026-10-25T00:00:00+02:00');
+  });
+});
 
 describe('toStockholmDate', () => {
   test('ger dagens datum i Stockholm', () => {

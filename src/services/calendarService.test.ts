@@ -39,6 +39,12 @@ describe('loadEvents', () => {
     });
   });
 
+  test('börjar vid midnatt även den dag klockan ställs om', async () => {
+    const fetch = fakeFetch([]);
+    await loadEvents(settings, { fetch, storage: fakeStorage(), now: new Date('2026-03-29T10:00:00Z') });
+    expect(new URL(fetch.mock.calls[0][0]).searchParams.get('timeMin')).toBe('2026-03-29T00:00:00+01:00');
+  });
+
   test('ger händelserna omvandlade', async () => {
     const events = await loadEvents(settings, { fetch: fakeFetch([fika]), storage: fakeStorage(), now });
     expect(events).toEqual([expect.objectContaining({ id: 'e1', title: '☕ Fika', category: 'fika', allDay: false })]);

@@ -44,6 +44,16 @@ describe('useEvents', () => {
     expect(result.current.error).toBeNull();
   });
 
+  test('visar samma vänliga fel när nätet saknas', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+    const useEvents = await importUseEvents(googleEnv);
+    const { result } = renderHook(() => useEvents());
+
+    await waitFor(() => expect(result.current.error).toBe('Kalendern gick inte att hämta just nu.'));
+    expect(result.current).toMatchObject({ isLoading: false, events: [] });
+  });
+
   test('visar ett vänligt fel och kan försöka igen', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     const fetch = vi

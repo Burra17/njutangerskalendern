@@ -1,5 +1,5 @@
 import type { CalendarEvent, GoogleCalendarEvent } from '../types/calendar';
-import { addDays, stockholmOffset, toStockholmDate } from '../utils/dates';
+import { addDays, stockholmMidnight, toStockholmDate } from '../utils/dates';
 import type { CalendarSettings } from './calendarSettings';
 import { toCalendarEvent } from './eventMapper';
 
@@ -49,10 +49,12 @@ function toCalendarEvents(items: GoogleCalendarEvent[]): CalendarEvent[] {
 
 // Trasig, främmande eller gammal cache räknas som ingen cache.
 function readCache(raw: string | null, now: Date): GoogleCalendarEvent[] | null {
+  if (!raw) return null;
   try {
-    const cached = JSON.parse(raw ?? 'null') as Partial<CachedResponse> | null;
-    const age = now.getTime() - (cached?.savedAt ?? NaN);
-    return Array.isArray(cached?.items) && age >= 0 && age < CACHE_MS ? cached.items : null;
+    const cached = JSON.parse(raw) as Partial<CachedResponse> | null;
+    if (typeof cached?.savedAt !== 'number' || !Array.isArray(cached.items)) return null;
+    const age = now.getTime() - cached.savedAt;
+    return age >= 0 && age < CACHE_MS ? cached.items : null;
   } catch {
     return null;
   }
@@ -64,8 +66,8 @@ function eventsUrl({ apiKey, calendarId }: CalendarSettings, now: Date): string 
   const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`);
   url.search = new URLSearchParams({
     key: apiKey,
-    timeMin: `${today}T00:00:00${stockholmOffset(today)}`,
-    timeMax: `${lastDay}T00:00:00${stockholmOffset(lastDay)}`,
+    timeMin: stockholmMidnight(today),
+    timeMax: stockholmMidnight(lastDay),
     singleEvents: 'true',
     orderBy: 'startTime',
     maxResults: String(MAX_RESULTS),

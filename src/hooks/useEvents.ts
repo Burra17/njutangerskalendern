@@ -21,14 +21,19 @@ export function useEvents(): EventsState {
   useEffect(() => {
     if (!settings) return;
     let active = true;
+    // fetch slås in, eftersom webbläsaren kastar ett fel när den anropas lösryckt från window.
     loadEvents(settings, { fetch: (url) => fetch(url), storage: sessionStorageOrNothing(), now: new Date() })
-      .then((loaded) => active && setEvents(loaded))
+      .then((loaded) => {
+        if (active) setEvents(loaded);
+      })
       .catch((reason: unknown) => {
         // Byborna får ett och samma meddelande. Detaljerna, som fel nyckel eller nätverk, hamnar i konsolen.
         console.error(reason);
         if (active) setError(ERROR_MESSAGE);
       })
-      .finally(() => active && setIsLoading(false));
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
     return () => {
       active = false;
     };
