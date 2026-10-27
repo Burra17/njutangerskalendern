@@ -42,7 +42,7 @@ jobs:
         run: yarn lint
 
       # Bygget kör också tsc -b, men ett eget steg ger typfelen rätt namn.
-      - name: Typecheck
+      - name: Typkontroll
         if: '!cancelled()'
         run: yarn typecheck
 
