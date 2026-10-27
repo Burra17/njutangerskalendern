@@ -35,7 +35,7 @@ describe('loadEvents', () => {
       singleEvents: 'true',
       orderBy: 'startTime',
       maxResults: '250',
-      fields: 'items(id,summary,description,location,start,end)',
+      fields: 'items(id,recurringEventId,summary,description,location,start,end)',
     });
   });
 

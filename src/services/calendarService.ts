@@ -71,7 +71,7 @@ function eventsUrl({ apiKey, calendarId }: CalendarSettings, now: Date): string 
     singleEvents: 'true',
     orderBy: 'startTime',
     maxResults: String(MAX_RESULTS),
-    fields: 'items(id,summary,description,location,start,end)',
+    fields: 'items(id,recurringEventId,summary,description,location,start,end)',
   }).toString();
   return url.toString();
 }

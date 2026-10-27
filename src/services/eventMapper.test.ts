@@ -7,8 +7,8 @@ describe('mockdatan genom hela omvandlingen', () => {
   const events = createMockEvents(new Date('2026-06-19T08:00:00Z')).map(toCalendarEvent);
   const byId = (id: string) => events.find((event) => event.id === id)!;
 
-  test('alla tretton händelser går igenom', () => {
-    expect(events).toHaveLength(13);
+  test('alla sjutton tillfällen går igenom', () => {
+    expect(events).toHaveLength(17);
   });
 
   test('HTML-beskrivningen blir läsbar text', () => {
@@ -85,6 +85,11 @@ describe('toCalendarEvent', () => {
     expect(toCalendarEvent({ ...base, summary: 'Söndagsträff', description: 'Vi bjuder på fika.' }).category).toBe('fika');
     expect(toCalendarEvent({ ...base, summary: 'Bokcirkel', description: 'Månadens bok.\nArrangör: Fikagruppen' }).category).toBe('ovrigt');
     expect(toCalendarEvent({ ...base, summary: undefined, description: 'Loppis i garaget' }).category).toBe('loppis');
+  });
+
+  test('ett tillfälle i en serie får seriens id, och en enstaka händelse får inget', () => {
+    expect(toCalendarEvent({ ...base, id: 'gympa_20261103T143000Z', recurringEventId: 'gympa' }).seriesId).toBe('gympa');
+    expect(toCalendarEvent(base).seriesId).toBeUndefined();
   });
 
   test('en händelse utan titel heter Händelse', () => {

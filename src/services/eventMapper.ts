@@ -13,6 +13,7 @@ export function toCalendarEvent(event: GoogleCalendarEvent): CalendarEvent {
     description: nonEmpty(text),
     location: nonEmpty(event.location),
     organizer,
+    seriesId: event.recurringEventId,
     category: categorize(title, text),
     ...toTiming(event),
   };
