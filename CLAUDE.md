@@ -29,7 +29,7 @@ Originalspecen står i [docs/projektspecifikation.md](docs/projektspecifikation.
 Den som lägger in händelser ska bara behöva skriva en vanlig titel. Det här gäller, och [docs/lathund.md](docs/lathund.md) beskriver det för henne:
 
 - **Kategorin** kommer från emojis och nyckelord i titeln. Det nyckelord som står först i titeln vinner. Beskrivningen används bara om titeln inte matchar något. Inget som matchar ger Övrigt.
-- **Matchningen** sker på delord utan hänsyn till versaler, så att "Styrelsemöte" matchar `möte`. Nyckelord på tre bokstäver eller kortare måste vara hela ord, så att `pub` inte matchar "publik".
+- **Matchningen** sker på delord utan hänsyn till versaler, så att "Kyrkkör" matchar `kyrk`. Nyckelord på tre bokstäver eller kortare måste vara hela ord, så att `pub` inte matchar "publik".
 - **`Arrangör: X`** på en egen rad i beskrivningen visas i kortets sidfot och tas bort från brödtexten.
 - **En händelse över flera dagar** blir ett kort med datumintervall, sorteras på startdagen och syns tills den är slut.
 

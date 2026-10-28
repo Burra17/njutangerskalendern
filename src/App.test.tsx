@@ -17,7 +17,7 @@ const gympa: CalendarEvent = { id: 'gympa', title: 'TEST Gympa', category: 'idro
 const fika: CalendarEvent = {
   id: 'fika',
   title: 'TEST Fika',
-  category: 'fika',
+  category: 'gemenskap',
   location: 'Bygdegården',
   allDay: true,
   startDate: '2026-11-07',
@@ -93,9 +93,11 @@ describe('kategorifiltret', () => {
       within(group)
         .getAllByRole('button')
         .map((button) => button.textContent),
-    ).toEqual(['Alla', 'Fika', 'Natur', 'Loppis', 'Möten', 'Idrott', 'Övrigt']);
+    ).toEqual(['Alla', 'Gemenskap', 'Kyrka', 'Loppis', 'Barn', 'Idrott', 'Övrigt']);
 
-    const fika = screen.getByRole('button', { name: 'Fika & Gemenskap' });
+    const barn = screen.getByRole('button', { name: 'Barn och ungdom' });
+    expect(barn.textContent).toBe('Barn');
+    const fika = screen.getByRole('button', { name: 'Gemenskap' });
     expect(fika.getAttribute('aria-pressed')).toBe('false');
 
     fireEvent.click(fika);
@@ -107,8 +109,8 @@ describe('kategorifiltret', () => {
     render(<App />);
     expect(pill('Alla').getAttribute('aria-pressed')).toBe('true');
 
-    fireEvent.click(pill('Fika & Gemenskap'));
-    expect(pill('Fika & Gemenskap').getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(pill('Gemenskap'));
+    expect(pill('Gemenskap').getAttribute('aria-pressed')).toBe('true');
     expect(pill('Alla').getAttribute('aria-pressed')).toBe('false');
     expect(months()).toEqual(['November 2026']);
     expect(screen.getByText('1 händelse matchar.')).toBeTruthy();
@@ -125,9 +127,9 @@ describe('kategorifiltret', () => {
 
   test('säger till när kategorin är tom, och Visa allt tömmer filtret', () => {
     render(<App />);
-    fireEvent.click(pill('Natur & Fix'));
+    fireEvent.click(pill('Kyrka'));
 
-    expect(screen.getByText('Inget inplanerat i Natur & Fix just nu.')).toBeTruthy();
+    expect(screen.getByText('Inget inplanerat i Kyrka just nu.')).toBeTruthy();
     fireEvent.click(pill('Visa allt'));
     expect(months()).toEqual(['Oktober 2026', 'November 2026']);
     expect(pill('Alla').getAttribute('aria-pressed')).toBe('true');
@@ -135,10 +137,10 @@ describe('kategorifiltret', () => {
 
   test('säger till när sökningen inte hittar något i kategorin, och Visa allt tömmer båda', () => {
     render(<App />);
-    fireEvent.click(pill('Idrott & Motion'));
+    fireEvent.click(pill('Idrott'));
     search('loppis');
 
-    expect(screen.getByText('Inget matchar ”loppis” i Idrott & Motion.')).toBeTruthy();
+    expect(screen.getByText('Inget matchar ”loppis” i Idrott.')).toBeTruthy();
     fireEvent.click(pill('Visa allt'));
     expect((screen.getByRole('searchbox') as HTMLInputElement).value).toBe('');
     expect(months()).toEqual(['Oktober 2026', 'November 2026']);

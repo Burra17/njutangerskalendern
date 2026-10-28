@@ -47,7 +47,7 @@ describe('loadEvents', () => {
 
   test('ger händelserna omvandlade', async () => {
     const events = await loadEvents(settings, { fetch: fakeFetch([fika]), storage: fakeStorage(), now });
-    expect(events).toEqual([expect.objectContaining({ id: 'e1', title: '☕ Fika', category: 'fika', allDay: false })]);
+    expect(events).toEqual([expect.objectContaining({ id: 'e1', title: '☕ Fika', category: 'gemenskap', allDay: false })]);
   });
 
   test('sparar svaret och frågar inte Google igen inom tio minuter', async () => {

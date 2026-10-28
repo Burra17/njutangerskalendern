@@ -7,7 +7,7 @@ const now = new Date('2026-10-27T11:00:00Z');
 const meeting: CalendarEvent = {
   id: 'mote',
   title: 'Styrelsemöte i bygdegården',
-  category: 'moten',
+  category: 'ovrigt',
   description: 'Dagordning:\n1. Ekonomi; budget, kassa',
   location: 'Bygdegården, Njutångersvägen 12, 825 96 Njutånger',
   organizer: 'Byalaget',
