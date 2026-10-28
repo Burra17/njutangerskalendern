@@ -10,11 +10,6 @@ export function googleCalendarUrl(event: CalendarEvent): string {
   return `https://calendar.google.com/calendar/render?${params}`;
 }
 
-// En data-URL i stället för en Blob, så att länken är en vanlig <a> utan någon URL att städa bort efteråt.
-export function icsDataUrl(event: CalendarEvent, now: Date): string {
-  return `data:text/calendar;charset=utf-8,${encodeURIComponent(icsFile(event, now))}`;
-}
-
 export function icsFile(event: CalendarEvent, now: Date): string {
   const [start, end] = compactTimes(event);
   const dateType = event.allDay ? ';VALUE=DATE' : '';
@@ -58,9 +53,13 @@ export function mapsUrl(location: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
-// iPadOS säger Macintosh, så den räknas också. Chrome på iPhone säger iPhone.
-export function isAppleDevice(userAgent: string): boolean {
-  return /iPhone|iPad|iPod|Macintosh/.test(userAgent);
+// ics: Safari och Mac. googleOnIos: andra webbläsare på iPhone och iPad, som bara öppnar en .ics som hämtas från en server (testat i #16).
+export type CalendarTarget = 'ics' | 'googleOnIos' | 'google';
+
+// iPadOS säger Macintosh, så den räknas också. Chrome, Firefox och Edge på iOS säger CriOS, FxiOS och EdgiOS.
+export function calendarTarget(userAgent: string): CalendarTarget {
+  if (!/iPhone|iPad|iPod|Macintosh/.test(userAgent)) return 'google';
+  return /CriOS|FxiOS|EdgiOS/.test(userAgent) ? 'googleOnIos' : 'ics';
 }
 
 // Anteckningen i kalendern. Arrangören är redan borttagen ur beskrivningen och läggs tillbaka här.

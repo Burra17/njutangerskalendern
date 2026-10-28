@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import type { CalendarEvent } from '../types/calendar';
 import EventCard from './EventCard';
 
@@ -44,6 +44,12 @@ function renderCard(event: CalendarEvent) {
   );
   return screen.getByRole('button', { name: event.title });
 }
+
+// jsdom har ingen createObjectURL, och kortet gör en Blob av .ics-filen.
+beforeEach(() => {
+  URL.createObjectURL = () => 'blob:test';
+  URL.revokeObjectURL = () => {};
+});
 
 afterEach(() => {
   cleanup();
@@ -112,7 +118,7 @@ describe('EventCard', () => {
 
     expect(screen.getByRole('link', { name: 'Lägg till i kalendern' }).getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\//);
     const file = screen.getByRole('link', { name: 'Annan kalender? Ladda ner fil' });
-    expect(file.getAttribute('href')).toMatch(/^data:text\/calendar/);
+    expect(file.getAttribute('href')).toBe('blob:test');
     expect(file.getAttribute('download')).toBe('test-styrelsemote.ics');
     expect(screen.getByRole('link', { name: 'Visa på karta' }).getAttribute('href')).toMatch(/^https:\/\/www\.google\.com\/maps\//);
   });
@@ -121,8 +127,19 @@ describe('EventCard', () => {
     vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)');
     fireEvent.click(renderCard(gympa));
 
-    expect(screen.getByRole('link', { name: 'Lägg till i kalendern' }).getAttribute('download')).toBe('test-gympa.ics');
+    const file = screen.getByRole('link', { name: 'Lägg till i kalendern' });
+    expect(file.getAttribute('href')).toBe('blob:test');
+    expect(file.getAttribute('download')).toBe('test-gympa.ics');
     expect(screen.getByRole('link', { name: 'Använder du Google Kalender?' }).getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\//);
     expect(screen.queryByRole('link', { name: 'Visa på karta' })).toBeNull();
+  });
+
+  test('ger Googles mall och ett tips om Safari i Chrome på iPhone', () => {
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) CriOS/130.0');
+    fireEvent.click(renderCard(gympa));
+
+    expect(screen.getByRole('link', { name: 'Lägg till i kalendern' }).getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\//);
+    expect(screen.getByText('Vill du ha den i iPhones kalender? Öppna sidan i Safari.')).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Annan kalender? Ladda ner fil' })).toBeNull();
   });
 });
