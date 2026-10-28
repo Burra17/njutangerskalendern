@@ -41,12 +41,7 @@ export function firstLine(text: string): string {
 // Titeln i kortet, utan emojin som avgjorde kategorin. Den står i stället i kategorietiketten (#44).
 export function cardTitle(event: CalendarEvent): string {
   if (!event.categoryEmoji) return event.title;
-  return (
-    event.title
-      .replace(event.categoryEmoji, '')
-      .replace(/\s{2,}/g, ' ')
-      .trim() || event.title
-  );
+  return event.title.replace(event.categoryEmoji, '').replace(/ {2,}/g, ' ').trim() || event.title;
 }
 
 export function shortPlace(location: string): string {

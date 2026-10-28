@@ -92,7 +92,7 @@ describe('cardTitle', () => {
   test('låter andra emojis och titlar utan kategoriemoji stå kvar', () => {
     expect(cardTitle(titled('☕ Fika med 🎂', '☕'))).toBe('Fika med 🎂');
     expect(cardTitle(titled('Byfest 🎉 med grill'))).toBe('Byfest 🎉 med grill');
-    expect(cardTitle(titled('Bokcirkel'))).toBe('Bokcirkel');
+    expect(cardTitle(titled('Bokcirkel 📚'))).toBe('Bokcirkel 📚');
   });
 
   test('behåller titeln när den bara är emojin', () => {
