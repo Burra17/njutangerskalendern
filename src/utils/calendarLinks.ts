@@ -4,7 +4,7 @@ import { addDays } from './dates';
 
 // Googles mall öppnar Google Kalender i appen eller på webben med händelsen ifylld.
 export function googleCalendarUrl(event: CalendarEvent): string {
-  const [start, end] = icsTimes(event);
+  const [start, end] = compactTimes(event);
   const params = new URLSearchParams({ action: 'TEMPLATE', text: event.title, dates: `${start}/${end}`, details: eventNotes(event) });
   if (event.location) params.set('location', event.location);
   return `https://calendar.google.com/calendar/render?${params}`;
@@ -16,7 +16,7 @@ export function icsDataUrl(event: CalendarEvent, now: Date): string {
 }
 
 export function icsFile(event: CalendarEvent, now: Date): string {
-  const [start, end] = icsTimes(event);
+  const [start, end] = compactTimes(event);
   const dateType = event.allDay ? ';VALUE=DATE' : '';
   const lines = [
     'BEGIN:VCALENDAR',
@@ -44,7 +44,7 @@ export function icsFileName(title: string): string {
   const slug = title
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-/, '')
     .slice(0, 50)
@@ -69,7 +69,7 @@ export function eventNotes(event: CalendarEvent): string {
 }
 
 // Tidsatta händelser i UTC, så att filen inte behöver någon tidszon. Heldagar har ett exklusivt slutdatum, som hos Google.
-function icsTimes(event: CalendarEvent): [string, string] {
+function compactTimes(event: CalendarEvent): [string, string] {
   if (event.allDay) return [compactDate(event.startDate), compactDate(addDays(event.endDate, 1))];
   return [utcStamp(event.start), utcStamp(event.end)];
 }
@@ -87,7 +87,7 @@ function utcStamp(instant: Date): string {
 }
 
 function escapeText(text: string): string {
-  return text.replace(/[\\;,]/g, (char) => `\\${char}`).replace(/\r?\n/g, '\\n');
+  return text.replace(/[\\;,]/g, (char) => `\\${char}`).replace(/\r\n|\r|\n/g, '\\n');
 }
 
 // En rad i .ics får vara högst 75 byte. Längre rader fortsätter på nästa rad efter ett mellanslag, som räknas in.
