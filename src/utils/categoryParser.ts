@@ -59,24 +59,39 @@ export function categoryById(id: CategoryId) {
   return CATEGORIES.find((category) => category.id === id) ?? CATEGORIES.find((category) => category.id === 'ovrigt')!;
 }
 
+// emoji är emojin i titeln som avgjorde kategorin, som den står där, eller null om ett ord eller beskrivningen avgjorde (#44).
+export type Categorized = { category: CategoryId; emoji: string | null };
+
 // Titeln går först. Beskrivningen ska komma utan raden "Arrangör:", eftersom arrangören säger vem och inte vad.
+export function categorizeWithEmoji(title: string, description = ''): Categorized {
+  const fromTitle = firstMatch(normalize(title));
+  if (fromTitle) return { category: fromTitle.id, emoji: fromTitle.emoji && emojiAsWritten(title, fromTitle.emoji) };
+  return { category: firstMatch(normalize(description))?.id ?? 'ovrigt', emoji: null };
+}
+
 export function categorize(title: string, description = ''): CategoryId {
-  return firstMatch(normalize(title)) ?? firstMatch(normalize(description)) ?? 'ovrigt';
+  return categorizeWithEmoji(title, description).category;
 }
 
 // Kategorin vars emoji eller nyckelord står först i texten, så att "Årsmöte med fika" blir ett möte.
-function firstMatch(text: string): CategoryId | null {
-  let best: { id: CategoryId; index: number } | null = null;
+function firstMatch(text: string): { id: CategoryId; emoji: string | null } | null {
+  let best: { id: CategoryId; index: number; emoji: string | null } | null = null;
   for (const category of CATEGORIES) {
-    const indexes = [
-      ...category.emojis.map((emoji: string) => text.indexOf(normalize(emoji))),
-      ...category.keywords.map((keyword: string) => findKeyword(text, keyword)),
+    const matches = [
+      ...category.emojis.map((emoji: string) => ({ index: text.indexOf(normalize(emoji)), emoji: normalize(emoji) })),
+      ...category.keywords.map((keyword: string) => ({ index: findKeyword(text, keyword), emoji: null })),
     ];
-    for (const index of indexes) {
-      if (index !== -1 && (best === null || index < best.index)) best = { id: category.id, index };
+    for (const { index, emoji } of matches) {
+      if (index !== -1 && (best === null || index < best.index)) best = { id: category.id, index, emoji };
     }
   }
-  return best?.id ?? null;
+  return best && { id: best.id, emoji: best.emoji };
+}
+
+// Emojin som den står i titeln, med variationstecknet om det finns, så att till exempel 🏷️ visas som emoji och inte som text.
+function emojiAsWritten(title: string, bare: string): string {
+  const index = title.indexOf(bare);
+  return title.slice(index, index + bare.length) + (title[index + bare.length] === '\u{FE0F}' ? '\u{FE0F}' : '');
 }
 
 // Tangentbord skriver ibland ö som o plus prickar, och vissa emojis med variationstecknet U+FE0F. Båda jämnas ut.

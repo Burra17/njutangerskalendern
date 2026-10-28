@@ -146,4 +146,19 @@ describe('EventCard', () => {
     expect(screen.getByText('Vill du ha den i iPhones kalender? Öppna sidan i Safari.')).toBeTruthy();
     expect(screen.queryByRole('link', { name: 'Annan kalender? Ladda ner fil' })).toBeNull();
   });
+
+  test('flyttar kategoriemojin från titeln till etiketten', () => {
+    render(
+      <ul>
+        <EventCard event={{ ...meeting, title: '📋 Styrelsemöte', categoryEmoji: '📋' }} now={now} />
+      </ul>,
+    );
+    const button = screen.getByRole('button', { name: 'Styrelsemöte' });
+    expect(within(button).getByText('Möten & Beslut', { exact: false }).textContent).toBe('📋 Möten & Beslut');
+  });
+
+  test('ger etiketten kategorins egen emoji när titeln inte har någon', () => {
+    const button = renderCard(meeting);
+    expect(within(button).getByText('Möten & Beslut', { exact: false }).textContent).toBe('📋 Möten & Beslut');
+  });
 });

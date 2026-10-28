@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { CalendarEvent, EventTiming } from '../types/calendar';
-import { alsoOn, dateBadge, shortPlace, timeRange } from './eventFormat';
+import { alsoOn, cardTitle, dateBadge, shortPlace, timeRange } from './eventFormat';
 
 function timed(start: string, end: string): CalendarEvent {
   return { id: 'e', title: 'e', category: 'ovrigt', allDay: false, start: new Date(start), end: new Date(end) };
@@ -78,5 +78,24 @@ describe('alsoOn', () => {
   test('klarar ett och två tillfällen', () => {
     expect(alsoOn([tuesday('2026-11-03')])).toBe('Även 3 nov.');
     expect(alsoOn([tuesday('2026-11-03'), { allDay: true, startDate: '2026-11-10', endDate: '2026-11-10' }])).toBe('Även 3 nov och 10 nov.');
+  });
+});
+
+describe('cardTitle', () => {
+  const titled = (title: string, categoryEmoji?: string): CalendarEvent => ({ ...allDay('2026-10-29', '2026-10-29'), title, categoryEmoji });
+
+  test('tar bort emojin som avgjorde kategorin, först eller mitt i titeln', () => {
+    expect(cardTitle(titled('☕ Förmiddagsfika', '☕'))).toBe('Förmiddagsfika');
+    expect(cardTitle(titled('TEST ☕ Fika', '☕'))).toBe('TEST Fika');
+  });
+
+  test('låter andra emojis och titlar utan kategoriemoji stå kvar', () => {
+    expect(cardTitle(titled('☕ Fika med 🎂', '☕'))).toBe('Fika med 🎂');
+    expect(cardTitle(titled('Byfest 🎉 med grill'))).toBe('Byfest 🎉 med grill');
+    expect(cardTitle(titled('Bokcirkel'))).toBe('Bokcirkel');
+  });
+
+  test('behåller titeln när den bara är emojin', () => {
+    expect(cardTitle(titled('☕', '☕'))).toBe('☕');
   });
 });

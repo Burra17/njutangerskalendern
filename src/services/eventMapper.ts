@@ -1,5 +1,5 @@
 import type { CalendarEvent, EventTiming, GoogleCalendarEvent } from '../types/calendar';
-import { categorize } from '../utils/categoryParser';
+import { categorizeWithEmoji } from '../utils/categoryParser';
 import { addDays } from '../utils/dates';
 import { extractOrganizer, toPlainText } from '../utils/descriptionText';
 
@@ -7,6 +7,7 @@ export function toCalendarEvent(event: GoogleCalendarEvent): CalendarEvent {
   const title = nonEmpty(event.summary) ?? 'Händelse';
   // Arrangören tas bort före kategorin, eftersom den säger vem och inte vad.
   const { organizer, text } = extractOrganizer(toPlainText(event.description ?? ''));
+  const { category, emoji } = categorizeWithEmoji(title, text);
   return {
     id: event.id,
     title,
@@ -14,7 +15,8 @@ export function toCalendarEvent(event: GoogleCalendarEvent): CalendarEvent {
     location: nonEmpty(event.location),
     organizer,
     seriesId: event.recurringEventId,
-    category: categorize(title, text),
+    category,
+    categoryEmoji: emoji ?? undefined,
     ...toTiming(event),
   };
 }

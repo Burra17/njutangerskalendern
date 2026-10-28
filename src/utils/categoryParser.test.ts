@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { categorize } from './categoryParser';
+import { categorize, categorizeWithEmoji } from './categoryParser';
 
 describe('categorize', () => {
   test('ett nyckelord i titeln ger sin kategori', () => {
@@ -67,5 +67,25 @@ describe('categorize', () => {
     ['🛍️ Hantverksmarknad', 'loppis'],
   ])('"%s" blir %s', (title, expected) => {
     expect(categorize(title)).toBe(expected);
+  });
+});
+
+describe('categorizeWithEmoji', () => {
+  test('ger emojin som avgjorde kategorin, som den står i titeln', () => {
+    expect(categorizeWithEmoji('☕ Förmiddagsfika')).toEqual({ category: 'fika', emoji: '☕' });
+    expect(categorizeWithEmoji('TEST ☕ Fika')).toEqual({ category: 'fika', emoji: '☕' });
+    expect(categorizeWithEmoji('🇸🇪 Midsommar')).toEqual({ category: 'fika', emoji: '🇸🇪' });
+  });
+
+  test('behåller variationstecknet när titeln har det, och lägger inte till det annars', () => {
+    expect(categorizeWithEmoji('\u{1F3F7}\u{FE0F} Loppis').emoji).toBe('\u{1F3F7}\u{FE0F}');
+    expect(categorizeWithEmoji('\u{1F3F7} Loppis').emoji).toBe('\u{1F3F7}');
+  });
+
+  test('ger ingen emoji när ett ord eller beskrivningen avgjorde', () => {
+    expect(categorizeWithEmoji('Byfest 🎉 med grill')).toEqual({ category: 'fika', emoji: null });
+    expect(categorizeWithEmoji('Fika i stugan')).toEqual({ category: 'fika', emoji: null });
+    expect(categorizeWithEmoji('Söndagsträff', 'Vi bjuder på fika ☕')).toEqual({ category: 'fika', emoji: null });
+    expect(categorizeWithEmoji('Bokcirkel')).toEqual({ category: 'ovrigt', emoji: null });
   });
 });
