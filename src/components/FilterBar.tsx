@@ -3,9 +3,6 @@ import type { Ref } from 'react';
 import type { SelectedCategory } from '../utils/categoryParser';
 import CategoryFilter from './CategoryFilter';
 
-// TILLFÄLLIG: förslag för #48. Tas bort innan PR:en mergas.
-const FILTER_VARIANT = new URLSearchParams(window.location.search).get('filter');
-
 type Props = {
   query: string;
   onQueryChange: (query: string) => void;
@@ -20,7 +17,7 @@ export default function FilterBar({ query, onQueryChange, onClear, searchRef, ca
   return (
     <div className='sticky top-0 z-10 border-b border-slate-200 bg-white shadow-sm'>
       <div className='mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 lg:flex-row lg:items-start'>
-        <div role='search' className={`relative w-full lg:shrink-0 ${FILTER_VARIANT ? 'lg:w-60' : 'lg:w-80'}`}>
+        <div role='search' className='relative w-full lg:w-80 lg:shrink-0'>
           <Search aria-hidden className='pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-slate-400' />
           {/* Webbläsarens eget kryss döljs, eftersom det ser olika ut och ibland saknas. Vårt ✕ ersätter det. */}
           <input

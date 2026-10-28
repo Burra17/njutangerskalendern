@@ -1,4 +1,5 @@
 // Den enda listan över kategorier. Ordningen är filterknapparnas ordning, och docs/lathund.md ska spegla innehållet.
+// shortLabel och dotClass används bara i filterraden, där pricken har samma färg som etiketten i korten (#48).
 export const CATEGORIES = [
   {
     id: 'fika',
@@ -7,6 +8,8 @@ export const CATEGORIES = [
     emojis: ['☕', '🇸🇪', '🎉'],
     keywords: ['fika', 'fest', 'midsommar', 'pub', 'grill'],
     badgeClass: 'bg-amber-100 text-amber-800',
+    shortLabel: 'Fika',
+    dotClass: 'bg-amber-400',
   },
   {
     id: 'natur',
@@ -15,6 +18,8 @@ export const CATEGORIES = [
     emojis: ['🧹', '🌸', '🌲'],
     keywords: ['städ', 'arbetsdag', 'brygga', 'vandring', 'fixa'],
     badgeClass: 'bg-emerald-100 text-emerald-800',
+    shortLabel: 'Natur',
+    dotClass: 'bg-emerald-500',
   },
   {
     id: 'loppis',
@@ -23,6 +28,8 @@ export const CATEGORIES = [
     emojis: ['🏷️', '🛍️'],
     keywords: ['loppis', 'marknad', 'baklucke', 'auktion'],
     badgeClass: 'bg-purple-100 text-purple-800',
+    shortLabel: 'Loppis',
+    dotClass: 'bg-purple-500',
   },
   {
     id: 'moten',
@@ -31,6 +38,8 @@ export const CATEGORIES = [
     emojis: ['📋', '🏛️'],
     keywords: ['möte', 'årsmöte', 'stämma', 'styrelse'],
     badgeClass: 'bg-blue-100 text-blue-800',
+    shortLabel: 'Möten',
+    dotClass: 'bg-blue-500',
   },
   {
     id: 'idrott',
@@ -39,6 +48,8 @@ export const CATEGORIES = [
     emojis: ['⚽', '🏃'],
     keywords: ['träning', 'fotboll', 'gympa', 'bastu'],
     badgeClass: 'bg-rose-100 text-rose-800',
+    shortLabel: 'Idrott',
+    dotClass: 'bg-rose-500',
   },
   {
     id: 'ovrigt',
@@ -47,6 +58,8 @@ export const CATEGORIES = [
     emojis: [],
     keywords: [],
     badgeClass: 'bg-slate-100 text-slate-700',
+    shortLabel: 'Övrigt',
+    dotClass: 'bg-slate-400',
   },
 ] as const;
 

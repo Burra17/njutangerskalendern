@@ -4,10 +4,10 @@ import { villageConfig } from '../config/villageConfig';
 import { eventMailto } from '../utils/eventMailto';
 import SubscribeButton from './SubscribeButton';
 
-// Desktop: klistrig under kategoriraden, som är upp till 105 px hög när pillren går på två rader. Mobil: under tidslinjen (beslut i #18).
+// Desktop: klistrig under kategoriraden, som är 66 px hög sedan #48. Mobil: under tidslinjen (beslut i #18).
 export default function Sidebar({ calendarId }: { calendarId: string | null }) {
   return (
-    <aside aria-label='Sidopanel' className='space-y-4 self-start lg:sticky lg:top-32'>
+    <aside aria-label='Sidopanel' className='space-y-4 self-start lg:sticky lg:top-22'>
       <SidebarCard title='Ha byn i din egen mobil'>
         <SubscribeButton calendarId={calendarId} />
       </SidebarCard>
