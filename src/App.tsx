@@ -3,7 +3,7 @@ import DemoBanner from './components/DemoBanner';
 import EventTimeline from './components/EventTimeline';
 import FilterBar from './components/FilterBar';
 import Header from './components/Header';
-import SubscribeButton from './components/SubscribeButton';
+import Sidebar from './components/Sidebar';
 import { useEvents } from './hooks/useEvents';
 import type { SelectedCategory } from './utils/categoryParser';
 import { filterByCategory, searchEvents } from './utils/eventSearch';
@@ -61,10 +61,7 @@ export default function App() {
             onRetry={retry}
           />
         </section>
-        {/* Sidopanelen (#18) lägger knappen i kortet "Ha byn i din egen mobil". */}
-        <aside aria-label='Sidopanel' className='self-start rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
-          <SubscribeButton calendarId={calendarId} />
-        </aside>
+        <Sidebar calendarId={calendarId} />
       </main>
     </>
   );
