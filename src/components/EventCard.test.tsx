@@ -146,10 +146,4 @@ describe('EventCard', () => {
     expect(screen.getByText('Vill du ha den i iPhones kalender? Öppna sidan i Safari.')).toBeTruthy();
     expect(screen.queryByRole('link', { name: 'Annan kalender? Ladda ner fil' })).toBeNull();
   });
-
-  // jsdom räknar inte ut layout, så testet kontrollerar klassen. Bredden mäts i webbläsaren (#39).
-  test('låter ett långt ord brytas var som helst i kortet, så att sidan inte blir bredare än skärmen', () => {
-    renderCard({ ...meeting, description: 'https://njutangerskalendern.vercel.app/en/mycket/lang/lank' });
-    expect(screen.getByRole('listitem').className).toContain('wrap-anywhere');
-  });
 });

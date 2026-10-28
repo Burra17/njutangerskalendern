@@ -21,11 +21,8 @@ export default function EventCard({ event, now }: { event: CalendarEvent; now: D
   const badgeStyle = BADGE_STYLES[badge.level];
   const fullPlaceDiffers = event.location && event.location !== shortPlace(event.location);
 
-  // wrap-anywhere ärvs av allt i kortet. break-words räcker inte, eftersom det inte krymper ett långt ords minsta bredd (#39).
   return (
-    <li
-      className={`rounded-xl border bg-white wrap-anywhere shadow-sm transition-shadow hover:shadow-md ${open ? 'border-emerald-300' : 'border-slate-200'}`}
-    >
+    <li className={`rounded-xl border bg-white shadow-sm transition-shadow hover:shadow-md ${open ? 'border-emerald-300' : 'border-slate-200'}`}>
       {/* Namnet är bara titeln, och tid och plats blir beskrivning, så att skärmläsaren inte läser hela kortet som namn. */}
       <button
         type='button'

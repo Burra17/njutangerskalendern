@@ -47,9 +47,9 @@ export default function App() {
         category={category}
         onCategoryChange={selectCategory}
       />
-      {/* grid-cols-1 ger mobilkolumnen minmax(0, 1fr), så att ett långt ord inte gör sidan bredare än skärmen (#39). */}
+      {/* grid-cols-1 och wrap-anywhere: ett långt ord i en händelse eller en sökning gör inte sidan bredare än skärmen (#39). */}
       <main className='mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 py-6 lg:grid-cols-3'>
-        <section aria-label='Kommande händelser' className='lg:col-span-2'>
+        <section aria-label='Kommande händelser' className='wrap-anywhere lg:col-span-2'>
           <EventTimeline
             events={searchEvents(filterByCategory(events, category), query)}
             query={query}
