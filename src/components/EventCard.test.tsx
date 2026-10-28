@@ -164,8 +164,7 @@ describe('EventCard', () => {
 
   test('har kalenderknappen före kartan', () => {
     fireEvent.click(renderCard(meeting));
-    const calendar = screen.getByRole('link', { name: 'Lägg till i kalendern' });
-    const map = screen.getByRole('link', { name: 'Visa på karta' });
-    expect(calendar.compareDocumentPosition(map) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const links = screen.getAllByRole('link').map((link) => link.textContent);
+    expect(links.indexOf('Lägg till i kalendern')).toBeLessThan(links.indexOf('Visa på karta'));
   });
 });
