@@ -3,7 +3,6 @@ import DemoBanner from './components/DemoBanner';
 import EventTimeline from './components/EventTimeline';
 import FilterBar from './components/FilterBar';
 import Header from './components/Header';
-import { HeaderAlmanac, HeaderVillage, HeaderWeek } from './components/HeaderPrototypes';
 import Sidebar from './components/Sidebar';
 import { useEvents } from './hooks/useEvents';
 import type { SelectedCategory } from './utils/categoryParser';
@@ -39,15 +38,7 @@ export default function App() {
   return (
     <>
       {isDemo && <DemoBanner />}
-      {/* TILLFÄLLIG: förslag på header för #49. Tas bort innan PR:en mergas. */}
-      {(() => {
-        const headerEvents = isLoading || error ? null : events;
-        const variant = new URLSearchParams(window.location.search).get('header');
-        if (variant === 'a') return <HeaderAlmanac events={headerEvents} />;
-        if (variant === 'b') return <HeaderVillage events={headerEvents} />;
-        if (variant === 'c') return <HeaderWeek events={headerEvents} />;
-        return <Header events={headerEvents} />;
-      })()}
+      <Header events={isLoading || error ? null : events} />
       <div ref={listStartRef} />
       <FilterBar
         query={query}
