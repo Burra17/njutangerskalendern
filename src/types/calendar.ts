@@ -26,6 +26,8 @@ export type CalendarEvent = {
   location?: string;
   organizer?: string;
   category: CategoryId;
+  // Emojin i titeln som avgjorde kategorin. Kortet flyttar den från titeln till kategorietiketten (#44).
+  categoryEmoji?: string;
   // Googles recurringEventId, samma för alla tillfällen i en serie. Används för att slå ihop dem.
   seriesId?: string;
   // Finns när en återkommande serie har slagits ihop till sitt nästa tillfälle.

@@ -7,6 +7,7 @@ export function toCalendarEvent(event: GoogleCalendarEvent): CalendarEvent {
   const title = nonEmpty(event.summary) ?? 'Händelse';
   // Arrangören tas bort före kategorin, eftersom den säger vem och inte vad.
   const { organizer, text } = extractOrganizer(toPlainText(event.description ?? ''));
+  const { category, emoji } = categorize(title, text);
   return {
     id: event.id,
     title,
@@ -14,7 +15,8 @@ export function toCalendarEvent(event: GoogleCalendarEvent): CalendarEvent {
     location: nonEmpty(event.location),
     organizer,
     seriesId: event.recurringEventId,
-    category: categorize(title, text),
+    category,
+    categoryEmoji: emoji,
     ...toTiming(event),
   };
 }

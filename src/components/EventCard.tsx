@@ -2,7 +2,7 @@ import { ChevronDown, ChevronRight, Clock, MapPin, Repeat } from 'lucide-react';
 import { useId, useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
 import { categoryById } from '../utils/categoryParser';
-import { alsoOn, dateBadge, firstLine, shortPlace, timeRange, type DateBadge } from '../utils/eventFormat';
+import { alsoOn, cardTitle, dateBadge, firstLine, shortPlace, timeRange, type DateBadge } from '../utils/eventFormat';
 import EventActions from './EventActions';
 import LinkedText from './LinkedText';
 
@@ -15,6 +15,7 @@ const BADGE_STYLES: Record<DateBadge['level'], { box: string; label: string }> =
 export default function EventCard({ event, now }: { event: CalendarEvent; now: Date }) {
   const [open, setOpen] = useState(false);
   const category = categoryById(event.category);
+  const badgeEmoji = event.categoryEmoji ?? category.emoji;
   const titleId = useId();
   const metaId = useId();
   const badge = dateBadge(event, now);
@@ -37,9 +38,12 @@ export default function EventCard({ event, now }: { event: CalendarEvent; now: D
           <span className='text-2xl leading-tight font-bold'>{badge.day}</span>
         </div>
         <div className='min-w-0 flex-1'>
-          <span className={`inline-block rounded-md px-2 py-0.5 text-sm font-medium ${category.badgeClass}`}>{category.label}</span>
+          <span className={`inline-block rounded-md px-2 py-0.5 text-sm font-medium ${category.badgeClass}`}>
+            {badgeEmoji && <span aria-hidden>{badgeEmoji} </span>}
+            {category.label}
+          </span>
           <h3 id={titleId} className='mt-1 text-lg leading-snug font-bold text-slate-900'>
-            {event.title}
+            {cardTitle(event)}
           </h3>
           <p id={metaId} className='mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-base text-slate-600'>
             <IconText icon={Clock} text={timeRange(event)} />
