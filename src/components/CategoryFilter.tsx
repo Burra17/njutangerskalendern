@@ -4,8 +4,7 @@ type Props = { selected: SelectedCategory; onSelect: (category: SelectedCategory
 
 const PILLS = [{ id: null, label: 'Alla', shortLabel: 'Alla', dotClass: null }, ...CATEGORIES];
 
-// Vita piller med en prick i etikettens färg, så att raden är lugn men hänger ihop med korten. Bara den valda knappen har färg (#48).
-// I mobilen en rad som skrollar i sidled, med uttonad högerkant som visar att det finns fler.
+// Vita piller med prick i etikettens färg (#48). Mobil: skrollar i sidled. Desktop: en rad, som bryts hellre än flödar över om fler kategorier tillkommer.
 export default function CategoryFilter({ selected, onSelect }: Props) {
   return (
     <div

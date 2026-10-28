@@ -88,8 +88,14 @@ describe('kategorifiltret', () => {
 
   test('visar korta namn med hela kategorinamnet som tillgängligt namn, och markerar den valda', () => {
     render(<App />);
+    const group = screen.getByRole('group', { name: 'Visa kategori' });
+    expect(
+      within(group)
+        .getAllByRole('button')
+        .map((button) => button.textContent),
+    ).toEqual(['Alla', 'Fika', 'Natur', 'Loppis', 'Möten', 'Idrott', 'Övrigt']);
+
     const fika = screen.getByRole('button', { name: 'Fika & Gemenskap' });
-    expect(fika.textContent).toBe('Fika');
     expect(fika.getAttribute('aria-pressed')).toBe('false');
 
     fireEvent.click(fika);
