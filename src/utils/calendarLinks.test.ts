@@ -33,9 +33,7 @@ function lines(event: CalendarEvent): string[] {
 
 describe('eventNotes', () => {
   test('lägger beskrivning, arrangör och sajtens adress i den ordningen', () => {
-    expect(eventNotes(meeting)).toBe(
-      'Dagordning:\n1. Ekonomi; budget, kassa\n\nArrangör: Byalaget\n\nhttps://njutangerskalendern.vercel.app',
-    );
+    expect(eventNotes(meeting)).toBe('Dagordning:\n1. Ekonomi; budget, kassa\n\nArrangör: Byalaget\n\nhttps://njutangerskalendern.vercel.app');
   });
 
   test('har bara adressen när beskrivning och arrangör saknas', () => {

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 import type { CalendarEvent } from '../types/calendar';
 import EventCard from './EventCard';
 
@@ -45,7 +45,10 @@ function renderCard(event: CalendarEvent) {
   return screen.getByRole('button', { name: event.title });
 }
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 describe('EventCard', () => {
   test('visar det viktigaste hopfällt', () => {
@@ -102,5 +105,24 @@ describe('EventCard', () => {
 
     expect(container.querySelector('b, img')).toBeNull();
     expect(screen.getAllByText('<b>fet</b> <img src=x onerror=alert(1)>', { exact: false }).length).toBeGreaterThan(0);
+  });
+
+  test('ger kalenderknappen Googles mall och filen som reserv utanför Apple, och kartan när platsen finns', () => {
+    fireEvent.click(renderCard(meeting));
+
+    expect(screen.getByRole('link', { name: 'Lägg till i kalendern' }).getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\//);
+    const file = screen.getByRole('link', { name: 'Annan kalender? Ladda ner fil' });
+    expect(file.getAttribute('href')).toMatch(/^data:text\/calendar/);
+    expect(file.getAttribute('download')).toBe('test-styrelsemote.ics');
+    expect(screen.getByRole('link', { name: 'Visa på karta' }).getAttribute('href')).toMatch(/^https:\/\/www\.google\.com\/maps\//);
+  });
+
+  test('ger filen först på en iPhone, och visar ingen karta utan plats', () => {
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)');
+    fireEvent.click(renderCard(gympa));
+
+    expect(screen.getByRole('link', { name: 'Lägg till i kalendern' }).getAttribute('download')).toBe('test-gympa.ics');
+    expect(screen.getByRole('link', { name: 'Använder du Google Kalender?' }).getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\//);
+    expect(screen.queryByRole('link', { name: 'Visa på karta' })).toBeNull();
   });
 });

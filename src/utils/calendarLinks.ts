@@ -80,7 +80,10 @@ function compactDate(date: IsoDate): string {
 
 // Till exempel '20261029T140000Z'.
 function utcStamp(instant: Date): string {
-  return instant.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return instant
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '');
 }
 
 function escapeText(text: string): string {
