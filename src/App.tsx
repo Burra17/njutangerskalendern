@@ -38,7 +38,7 @@ export default function App() {
   return (
     <>
       {isDemo && <DemoBanner />}
-      <Header />
+      <Header events={events} isLoading={isLoading} />
       <div ref={listStartRef} />
       <FilterBar
         query={query}
