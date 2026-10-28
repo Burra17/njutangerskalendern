@@ -1,6 +1,5 @@
 export const villageConfig = {
   siteName: 'Njutångerskalendern',
-  tagline: 'Vad händer i byn?',
   villageName: 'Njutånger',
   // Står i händelser som folk lagt till i sin kalender, och byts när den egna domänen finns (#22).
   siteUrl: 'https://njutangerskalendern.vercel.app',

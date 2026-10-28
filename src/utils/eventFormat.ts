@@ -1,5 +1,5 @@
 import type { CalendarEvent, EventTiming } from '../types/calendar';
-import { addDays, dayOfMonth, monthKey, noonUtc, shortDate, startDay, STOCKHOLM, toStockholmDate } from './dates';
+import { addDays, dayOfMonth, monthKey, noonUtc, shortDate, startDay, STOCKHOLM, toStockholmDate, withoutDot } from './dates';
 
 export type DateBadge = { label: string; day: number; level: 'strong' | 'soft' | 'normal' };
 
@@ -16,7 +16,7 @@ export function dateBadge(event: CalendarEvent, now: Date): DateBadge {
   if (ongoing) return { label: 'Pågår', day: date, level: 'strong' };
   if (day === today) return { label: 'Idag', day: date, level: 'strong' };
   if (day === addDays(today, 1)) return { label: 'Imorgon', day: date, level: 'soft' };
-  return { label: weekdayFormat.format(noonUtc(day)).replace('.', ''), day: date, level: 'normal' };
+  return { label: withoutDot(weekdayFormat.format(noonUtc(day))), day: date, level: 'normal' };
 }
 
 export function timeRange(event: CalendarEvent): string {
