@@ -18,7 +18,7 @@ describe('Header', () => {
     vi.useFakeTimers({ now });
     render(<Header events={[fika]} />);
 
-    expect(screen.getByText('Onsdag 28 okt. 1 sak i veckan.')).toBeTruthy();
+    expect(screen.getByText('Onsdag 28 okt. 1 händelse i veckan.')).toBeTruthy();
     expect(screen.getByText('1 sak händer den här veckan.', { exact: false })).toBeTruthy();
   });
 

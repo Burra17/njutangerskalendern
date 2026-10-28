@@ -73,8 +73,8 @@ describe('weekCountText', () => {
   });
 
   test('skriver antalet i kort form för mobilen', () => {
-    expect(weekCountText(3, true)).toBe('3 saker i veckan.');
-    expect(weekCountText(1, true)).toBe('1 sak i veckan.');
+    expect(weekCountText(3, true)).toBe('3 händelser i veckan.');
+    expect(weekCountText(1, true)).toBe('1 händelse i veckan.');
     expect(weekCountText(0, true)).toBe('Inget inbokat i veckan.');
   });
 });

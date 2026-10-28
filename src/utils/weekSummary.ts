@@ -20,9 +20,9 @@ export function countRestOfWeek(events: CalendarEvent[], now: Date): number {
 
 // Den korta formen är för mobilen, så att raden ryms på en rad (beslut i #49).
 export function weekCountText(count: number, short = false): string {
-  const week = short ? 'i veckan' : 'den här veckan';
-  if (count === 0) return `Inget inbokat ${week}.`;
-  return `${count} ${count === 1 ? 'sak' : 'saker'} ${short ? '' : 'händer '}${week}.`;
+  if (short) return count === 0 ? 'Inget inbokat i veckan.' : `${count} ${count === 1 ? 'händelse' : 'händelser'} i veckan.`;
+  if (count === 0) return 'Inget inbokat den här veckan.';
+  return `${count} ${count === 1 ? 'sak' : 'saker'} händer den här veckan.`;
 }
 
 // 0 på söndagar, så att veckan då bara är idag.
