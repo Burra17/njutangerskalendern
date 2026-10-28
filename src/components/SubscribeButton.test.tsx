@@ -43,9 +43,12 @@ describe('SubscribeButton', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Kopierad!' })).toBeTruthy());
   });
 
-  test('visar adressen när urklippet inte fungerar', async () => {
+  test.each([
+    ['nekas', { writeText: () => Promise.reject(new Error('nekad')) }],
+    ['saknas helt, som utan https', undefined],
+  ])('visar adressen när urklippet %s', async (_, clipboard) => {
     onDevice('Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130.0 Safari/537.36');
-    withClipboard(() => Promise.reject(new Error('nekad')));
+    Object.defineProperty(navigator, 'clipboard', { value: clipboard, configurable: true });
     render(<SubscribeButton calendarId={calendarId} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Annan kalender? Kopiera adressen' }));

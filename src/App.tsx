@@ -5,14 +5,11 @@ import FilterBar from './components/FilterBar';
 import Header from './components/Header';
 import SubscribeButton from './components/SubscribeButton';
 import { useEvents } from './hooks/useEvents';
-import { readCalendarSettings } from './services/calendarSettings';
 import type { SelectedCategory } from './utils/categoryParser';
 import { filterByCategory, searchEvents } from './utils/eventSearch';
 
-const calendarId = readCalendarSettings(import.meta.env)?.calendarId ?? null;
-
 export default function App() {
-  const { events, isLoading, error, isDemo, retry } = useEvents();
+  const { events, isLoading, error, isDemo, calendarId, retry } = useEvents();
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<SelectedCategory>(null);
   const searchRef = useRef<HTMLInputElement>(null);

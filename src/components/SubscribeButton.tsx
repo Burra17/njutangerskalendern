@@ -4,6 +4,7 @@ import { calendarTarget } from '../utils/calendarLinks';
 import { subscriptionLinks } from '../utils/subscriptionLinks';
 
 const BUTTON = 'inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-base font-semibold';
+const NEW_TAB = { target: '_blank', rel: 'noopener noreferrer' };
 const SMALL = 'text-sm text-slate-600';
 const SMALL_LINK = `${SMALL} py-1 underline underline-offset-2 hover:text-slate-900`;
 
@@ -31,8 +32,8 @@ export default function SubscribeButton({ calendarId }: { calendarId: string | n
   }
 
   const links = subscriptionLinks(calendarId);
-  // Apple-enheter öppnar webcal i Kalender-appen. Övriga får Googles länk, så att nya händelser kommer fram inom minuter (beslut i #17).
-  const apple = calendarTarget(navigator.userAgent) !== 'google';
+  // Allt utom 'google' är iPhone, iPad och Safari på Mac, som öppnar webcal i Kalender-appen. Övriga får Googles länk, där nya händelser kommer fram inom minuter (#17).
+  const opensWebcal = calendarTarget(navigator.userAgent) !== 'google';
 
   function copyAddress() {
     // Utan https finns inget navigator.clipboard alls.
@@ -46,15 +47,15 @@ export default function SubscribeButton({ calendarId }: { calendarId: string | n
   return (
     <div className='space-y-2 text-center'>
       <a
-        href={apple ? links.webcal : links.google}
-        {...(apple ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+        href={opensWebcal ? links.webcal : links.google}
+        {...(opensWebcal ? {} : NEW_TAB)}
         className={`${BUTTON} bg-emerald-800 text-white hover:bg-emerald-900`}
       >
         {label}
       </a>
       <p className={SMALL}>Nya händelser dyker upp i din kalender av sig själva.</p>
-      {apple ? (
-        <a href={links.google} target='_blank' rel='noopener noreferrer' className={SMALL_LINK}>
+      {opensWebcal ? (
+        <a href={links.google} {...NEW_TAB} className={SMALL_LINK}>
           Använder du Google Kalender?
         </a>
       ) : (
