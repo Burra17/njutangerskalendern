@@ -21,14 +21,9 @@ export default function EventActions({ event, now }: { event: CalendarEvent; now
     </>
   );
 
+  // Till vänster med kalenderknappen först, så att knapparna står på samma ställe i alla kort (beslut i #46).
   return (
-    <div className='flex w-full flex-col gap-2 sm:ml-auto sm:w-auto sm:flex-row sm:items-start'>
-      {event.location && (
-        <a href={mapsUrl(event.location)} {...NEW_TAB} className={`${BUTTON} border border-slate-300 bg-white text-slate-800 hover:bg-slate-50`}>
-          <MapPin aria-hidden className='size-5' />
-          Visa på karta
-        </a>
-      )}
+    <div className='flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-start'>
       <div className='flex flex-col gap-1 text-center'>
         {target === 'ics' ? (
           <>
@@ -54,6 +49,12 @@ export default function EventActions({ event, now }: { event: CalendarEvent; now
           </>
         )}
       </div>
+      {event.location && (
+        <a href={mapsUrl(event.location)} {...NEW_TAB} className={`${BUTTON} border border-slate-300 bg-white text-slate-800 hover:bg-slate-50`}>
+          <MapPin aria-hidden className='size-5' />
+          Visa på karta
+        </a>
+      )}
     </div>
   );
 }

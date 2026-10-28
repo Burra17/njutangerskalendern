@@ -161,4 +161,11 @@ describe('EventCard', () => {
     const button = renderCard(meeting);
     expect(within(button).getByText('Möten & Beslut', { exact: false }).textContent).toBe('📋 Möten & Beslut');
   });
+
+  test('har kalenderknappen före kartan', () => {
+    fireEvent.click(renderCard(meeting));
+    const calendar = screen.getByRole('link', { name: 'Lägg till i kalendern' });
+    const map = screen.getByRole('link', { name: 'Visa på karta' });
+    expect(calendar.compareDocumentPosition(map) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
 });

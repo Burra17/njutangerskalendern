@@ -70,7 +70,7 @@ export default function EventCard({ event, now }: { event: CalendarEvent; now: D
             {fullPlaceDiffers && <p className='text-slate-600'>{event.location}</p>}
             {event.series && <p className='text-slate-600'>{alsoOn(event.series.later)}</p>}
           </div>
-          <div className='mt-4 flex flex-wrap items-center justify-between gap-3'>
+          <div className='mt-4 space-y-3'>
             {event.organizer && (
               <p className='text-base text-slate-500'>
                 Arrangör: <span className='font-semibold text-slate-800'>{event.organizer}</span>
