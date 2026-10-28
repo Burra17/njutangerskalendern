@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test av .ics på iPhone</title>
+    <!-- Tillfällig testsida för #16. Tas bort innan PR:en mergas. -->
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 16px;
+        line-height: 1.4;
+      }
+      a,
+      button {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 8px 0 20px;
+        padding: 14px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 0;
+        background: #065f46;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+      }
+      h2 {
+        font-size: 18px;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test av .ics på iPhone</h1>
+    <p>
+      Tryck på knapparna en i taget och skriv upp vad som händer. Gör det i både Safari och Chrome. Varje knapp lägger till samma testhändelse den 5
+      november.
+    </p>
+    <p id="ua"></p>
+
+    <h2>A. Data-URL med download (som nu)</h2>
+    <a id="a" download="test.ics">A</a>
+
+    <h2>B. Data-URL utan download</h2>
+    <a id="b">B</a>
+
+    <h2>C. Knapp som navigerar till data-URL:en</h2>
+    <button id="c" type="button">C</button>
+
+    <h2>D. Knapp som navigerar till en Blob</h2>
+    <button id="d" type="button">D</button>
+
+    <h2>E. Blob-länk med download</h2>
+    <a id="e" download="test.ics">E</a>
+
+    <h2>F. Riktig fil på servern</h2>
+    <a href="/ics-test.ics">F</a>
+
+    <script type="module">
+      document.getElementById('ua').textContent = navigator.userAgent;
+      const ics = await (await fetch('/ics-test.ics')).text();
+      const dataUrl = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+      const blobUrl = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+      document.getElementById('a').href = dataUrl;
+      document.getElementById('b').href = dataUrl;
+      document.getElementById('c').onclick = () => (window.location.href = dataUrl);
+      document.getElementById('d').onclick = () => (window.location.href = blobUrl);
+      document.getElementById('e').href = blobUrl;
+    </script>
+  </body>
+</html>
