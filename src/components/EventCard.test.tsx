@@ -123,8 +123,10 @@ describe('EventCard', () => {
     expect(screen.getByRole('link', { name: 'Visa på karta' }).getAttribute('href')).toMatch(/^https:\/\/www\.google\.com\/maps\//);
   });
 
-  test('ger filen först på en iPhone, och visar ingen karta utan plats', () => {
-    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)');
+  test('ger filen först i Safari på iPhone, och visar ingen karta utan plats', () => {
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) Version/18.0 Mobile/15E148 Safari/604.1',
+    );
     fireEvent.click(renderCard(gympa));
 
     const file = screen.getByRole('link', { name: 'Lägg till i kalendern' });
@@ -134,8 +136,10 @@ describe('EventCard', () => {
     expect(screen.queryByRole('link', { name: 'Visa på karta' })).toBeNull();
   });
 
-  test('ger Googles mall och ett tips om Safari i Chrome på iPhone', () => {
-    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) CriOS/130.0');
+  test('ger Googles mall och ett tips om Safari i Google-appen på iPhone', () => {
+    vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) GSA/340.0 Mobile/15E148 Safari/604.1',
+    );
     fireEvent.click(renderCard(gympa));
 
     expect(screen.getByRole('link', { name: 'Lägg till i kalendern' }).getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\//);

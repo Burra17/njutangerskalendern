@@ -123,28 +123,44 @@ describe('mapsUrl', () => {
 });
 
 describe('calendarTarget', () => {
-  test('ger .ics till Safari på iPhone och iPad och till Mac', () => {
-    expect(calendarTarget('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile Safari/604.1')).toBe(
-      'ics',
-    );
-    expect(calendarTarget('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.0 Safari/605.1.15')).toBe('ics');
+  const ua = {
+    iphoneSafari:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+    ipadSafari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15',
+    macSafari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15',
+    iphoneChrome:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/130.0.6723.90 Mobile/15E148 Safari/604.1',
+    ipadChrome:
+      'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/130.0.6723.90 Mobile/15E148 Safari/604.1',
+    iphoneFirefox:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/133.0 Mobile/15E148 Safari/605.1.15',
+    iphoneEdge:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 EdgiOS/130.0.2849.80 Mobile/15E148 Safari/605.1.15',
+    googleApp:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/340.0.689826594 Mobile/15E148 Safari/604.1',
+    facebookApp:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBAV/490.0.0.40.108]',
+    macChrome: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+    android: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36',
+    androidWebView: 'Mozilla/5.0 (Linux; Android 14; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/130.0.0.0 Mobile Safari/537.36',
+    windows: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+  };
+
+  test('ger .ics bara till Safari på iPhone, iPad och Mac', () => {
+    expect(calendarTarget(ua.iphoneSafari)).toBe('ics');
+    expect(calendarTarget(ua.ipadSafari)).toBe('ics');
+    expect(calendarTarget(ua.macSafari)).toBe('ics');
   });
 
-  test('ger Google till Chrome, Firefox och Edge på iPhone och iPad', () => {
-    expect(calendarTarget('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 CriOS/130.0 Mobile/15E148')).toBe(
-      'googleOnIos',
-    );
-    expect(calendarTarget('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 CriOS/130.0 Mobile/15E148')).toBe('googleOnIos');
-    expect(calendarTarget('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 FxiOS/133.0 Mobile/15E148')).toBe(
-      'googleOnIos',
-    );
-    expect(calendarTarget('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 EdgiOS/130.0 Mobile/15E148')).toBe(
-      'googleOnIos',
-    );
+  test('ger Google till andra webbläsare och appar på iPhone och iPad', () => {
+    for (const agent of [ua.iphoneChrome, ua.ipadChrome, ua.iphoneFirefox, ua.iphoneEdge, ua.googleApp, ua.facebookApp]) {
+      expect(calendarTarget(agent)).toBe('googleOnIos');
+    }
   });
 
-  test('ger Google till Android och Windows', () => {
-    expect(calendarTarget('Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/130.0 Mobile Safari/537.36')).toBe('google');
-    expect(calendarTarget('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0 Safari/537.36')).toBe('google');
+  test('ger Google med filen som reserv till Android, Windows och Chrome på Mac', () => {
+    for (const agent of [ua.android, ua.androidWebView, ua.windows, ua.macChrome]) {
+      expect(calendarTarget(agent)).toBe('google');
+    }
   });
 });

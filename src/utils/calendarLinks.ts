@@ -53,13 +53,16 @@ export function mapsUrl(location: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
-// ics: Safari och Mac. googleOnIos: andra webbläsare på iPhone och iPad, som bara öppnar en .ics som hämtas från en server (testat i #16).
+// ics: Safari på iPhone, iPad och Mac. googleOnIos: allt annat på iPhone och iPad, som Chrome, Google-appen och Facebooks
+// inbyggda webbläsare. Där händer inget med en .ics som inte hämtas från en server (testat i #16).
 export type CalendarTarget = 'ics' | 'googleOnIos' | 'google';
 
-// iPadOS säger Macintosh, så den räknas också. Chrome, Firefox och Edge på iOS säger CriOS, FxiOS och EdgiOS.
+// Bara Safari har Version/ utan någon annan webbläsares märke. iPadOS säger Macintosh, och skiljs från en Mac genom Mobile/.
 export function calendarTarget(userAgent: string): CalendarTarget {
-  if (!/iPhone|iPad|iPod|Macintosh/.test(userAgent)) return 'google';
-  return /CriOS|FxiOS|EdgiOS/.test(userAgent) ? 'googleOnIos' : 'ics';
+  const apple = /iPhone|iPad|iPod|Macintosh/.test(userAgent);
+  const safari = /Version\/[\d.]+.*Safari\//.test(userAgent) && !/CriOS|FxiOS|EdgiOS|GSA\//.test(userAgent);
+  if (apple && safari) return 'ics';
+  return apple && /Mobile\//.test(userAgent) ? 'googleOnIos' : 'google';
 }
 
 // Anteckningen i kalendern. Arrangören är redan borttagen ur beskrivningen och läggs tillbaka här.
