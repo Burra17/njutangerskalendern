@@ -86,6 +86,23 @@ describe('kategorifiltret', () => {
     return screen.getByRole('button', { name });
   }
 
+  test('visar korta namn med hela kategorinamnet som tillgängligt namn, och markerar den valda', () => {
+    render(<App />);
+    const group = screen.getByRole('group', { name: 'Visa kategori' });
+    expect(
+      within(group)
+        .getAllByRole('button')
+        .map((button) => button.textContent),
+    ).toEqual(['Alla', 'Fika', 'Natur', 'Loppis', 'Möten', 'Idrott', 'Övrigt']);
+
+    const fika = screen.getByRole('button', { name: 'Fika & Gemenskap' });
+    expect(fika.getAttribute('aria-pressed')).toBe('false');
+
+    fireEvent.click(fika);
+    expect(fika.getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', { name: 'Alla' }).getAttribute('aria-pressed')).toBe('false');
+  });
+
   test('visar bara vald kategori och fungerar tillsammans med sökningen', () => {
     render(<App />);
     expect(pill('Alla').getAttribute('aria-pressed')).toBe('true');

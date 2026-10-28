@@ -2,9 +2,9 @@ import { CATEGORIES, type SelectedCategory } from '../utils/categoryParser';
 
 type Props = { selected: SelectedCategory; onSelect: (category: SelectedCategory) => void };
 
-const PILLS = [{ id: null, label: 'Alla', emoji: null, badgeClass: 'bg-slate-100 text-slate-700' }, ...CATEGORIES];
+const PILLS = [{ id: null, label: 'Alla', shortLabel: 'Alla', dotClass: null }, ...CATEGORIES];
 
-// I mobilen en rad som skrollar i sidled, med uttonad högerkant som visar att det finns fler. På desktop bryts den till fler rader.
+// Vita piller med prick i etikettens färg (#48). Mobil: skrollar i sidled. Desktop: en rad, som bryts hellre än flödar över om fler kategorier tillkommer.
 export default function CategoryFilter({ selected, onSelect }: Props) {
   return (
     <div
@@ -14,16 +14,18 @@ export default function CategoryFilter({ selected, onSelect }: Props) {
     >
       {PILLS.map((pill) => {
         const pressed = pill.id === selected;
+        // Det tillgängliga namnet är hela kategorinamnet, som börjar med det korta namnet som syns.
         return (
           <button
             key={pill.id ?? 'alla'}
             type='button'
             aria-pressed={pressed}
+            aria-label={pill.label}
             onClick={() => onSelect(pill.id)}
-            className={`shrink-0 rounded-full px-3 py-1.5 text-base font-medium whitespace-nowrap ${pressed ? 'bg-emerald-800 text-white' : `${pill.badgeClass} hover:brightness-95`}`}
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-base font-medium whitespace-nowrap ${pressed ? 'border-emerald-800 bg-emerald-800 text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'}`}
           >
-            {pill.emoji && <span aria-hidden>{pill.emoji} </span>}
-            {pill.label}
+            {pill.dotClass && <span aria-hidden className={`size-2.5 rounded-full ${pressed ? 'bg-white' : pill.dotClass}`} />}
+            {pill.shortLabel}
           </button>
         );
       })}
