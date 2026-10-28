@@ -3,12 +3,13 @@ import DemoBanner from './components/DemoBanner';
 import EventTimeline from './components/EventTimeline';
 import FilterBar from './components/FilterBar';
 import Header from './components/Header';
+import SubscribeButton from './components/SubscribeButton';
 import { useEvents } from './hooks/useEvents';
 import type { SelectedCategory } from './utils/categoryParser';
 import { filterByCategory, searchEvents } from './utils/eventSearch';
 
 export default function App() {
-  const { events, isLoading, error, isDemo, retry } = useEvents();
+  const { events, isLoading, error, isDemo, calendarId, retry } = useEvents();
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<SelectedCategory>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -60,9 +61,9 @@ export default function App() {
             onRetry={retry}
           />
         </section>
-        {/* Platshållaren ersätts av sidopanelen (#18). */}
-        <aside aria-label='Sidopanel' className='rounded-lg border border-dashed border-slate-300 p-6 text-slate-500'>
-          Sidopanelen kommer här.
+        {/* Sidopanelen (#18) lägger knappen i kortet "Ha byn i din egen mobil". */}
+        <aside aria-label='Sidopanel' className='self-start rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+          <SubscribeButton calendarId={calendarId} />
         </aside>
       </main>
     </>

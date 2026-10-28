@@ -6,7 +6,15 @@ import { createMockEvents } from '../services/mockEvents';
 import type { CalendarEvent } from '../types/calendar';
 import { mergeSeries } from '../utils/recurringSeries';
 
-export type EventsState = { events: CalendarEvent[]; isLoading: boolean; error: string | null; isDemo: boolean; retry: () => void };
+// calendarId är null i demoläget.
+export type EventsState = {
+  events: CalendarEvent[];
+  isLoading: boolean;
+  error: string | null;
+  isDemo: boolean;
+  calendarId: string | null;
+  retry: () => void;
+};
 
 const ERROR_MESSAGE = 'Kalendern gick inte att hämta just nu.';
 
@@ -46,8 +54,8 @@ export function useEvents(): EventsState {
     setAttempt((count) => count + 1);
   };
 
-  if (mockEvents) return { events: mockEvents, isLoading: false, error: null, isDemo: true, retry };
-  return { events, isLoading, error, isDemo: false, retry };
+  if (mockEvents) return { events: mockEvents, isLoading: false, error: null, isDemo: true, calendarId: null, retry };
+  return { events, isLoading, error, isDemo: false, calendarId: settings?.calendarId ?? null, retry };
 }
 
 // Redan åtkomsten till sessionStorage kastar ett fel när webbplatsdata är blockerad.
