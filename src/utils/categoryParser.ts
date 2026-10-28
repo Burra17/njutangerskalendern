@@ -83,7 +83,7 @@ export function categorize(title: string, description = ''): Categorized {
   return { category: firstMatch(normalize(description))?.category ?? 'ovrigt' };
 }
 
-// Kategorin vars emoji eller nyckelord står först i texten, så att "Årsmöte med fika" blir ett möte. emoji är normaliserad här.
+// Kategorin vars emoji eller nyckelord står först i texten, så att "Barnloppis" blir Barn och ungdom. emoji är normaliserad här.
 function firstMatch(text: string): Categorized | null {
   let best: (Categorized & { index: number }) | null = null;
   for (const category of CATEGORIES) {

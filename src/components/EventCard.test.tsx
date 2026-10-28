@@ -8,8 +8,8 @@ import EventCard from './EventCard';
 const now = new Date('2026-10-27T11:00:00Z');
 
 const meeting: CalendarEvent = {
-  id: 'mote',
-  title: 'TEST Styrelsemöte',
+  id: 'kyrkorad',
+  title: 'TEST Kyrkorådet',
   category: 'kyrka',
   description: 'Dagordning:\n• Ekonomi\nRing 070-174 06 05 eller se https://example.com/protokoll',
   location: 'Bygdegården, Njutångersvägen 12, 825 96 Njutånger',
@@ -119,7 +119,7 @@ describe('EventCard', () => {
     expect(screen.getByRole('link', { name: 'Lägg till i kalendern' }).getAttribute('href')).toMatch(/^https:\/\/calendar\.google\.com\//);
     const file = screen.getByRole('link', { name: 'Annan kalender? Ladda ner fil' });
     expect(file.getAttribute('href')).toBe('blob:test');
-    expect(file.getAttribute('download')).toBe('test-styrelsemote.ics');
+    expect(file.getAttribute('download')).toBe('test-kyrkoradet.ics');
     expect(screen.getByRole('link', { name: 'Visa på karta' }).getAttribute('href')).toMatch(/^https:\/\/www\.google\.com\/maps\//);
   });
 

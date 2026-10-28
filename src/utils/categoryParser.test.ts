@@ -53,14 +53,14 @@ describe('categorize', () => {
   // Mockdatans titlar, utskrivna här så att facit inte flyttar sig om mockdatan ändras.
   test.each([
     ['☕ Förmiddagsfika i bygdegården', 'gemenskap'],
-    ['⛪ Gudstjänst', 'kyrka'],
+    ['⛪ Kyrkorådet', 'kyrka'],
     ['🧹 Städdag vid badplatsen', 'gemenskap'],
     ['🏷️ Loppis på skolgården', 'loppis'],
     ['⚽ Fotbollsträning för barn', 'idrott'],
     ['Bastukväll', 'idrott'],
     ['Årsmöte med fika', 'gemenskap'],
     ['🎉 Byfest', 'gemenskap'],
-    ['Vandring längs ån', 'ovrigt'],
+    ['🧒 Scouterna vandrar längs ån', 'barn'],
     ['Bokcirkel', 'ovrigt'],
     ['Auktion i bygdegården', 'loppis'],
     ['Planeringsmöte för hantverksmarknaden', 'loppis'],
@@ -94,6 +94,7 @@ describe('categorize med emoji', () => {
     expect(categorize('Andakt vid sjön').category).toBe('kyrka');
     expect(categorize('Konsert i EFS-kyrkan').category).toBe('kyrka');
     expect(categorize('Bön för fred').category).toBe('kyrka');
+    expect(categorize('\u{1F54A} Minnesstund').category).toBe('kyrka');
   });
 
   test('barn och ungdom, med lek som ett helt ord', () => {

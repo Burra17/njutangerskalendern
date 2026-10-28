@@ -28,6 +28,7 @@ Sajten färgar händelsen efter vad som står i titeln. Börja gärna titeln med
 Exempel:
 
 - **☕ Fika i bygdegården** blir Gemenskap.
+- **Kyrkfika** blir Kyrka, eftersom "kyrk" står först.
 - **Årsmöte med fika** blir Gemenskap.
 - **Bokcirkel** blir Övrigt.
 
