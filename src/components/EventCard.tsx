@@ -3,6 +3,7 @@ import { useId, useState } from 'react';
 import type { CalendarEvent } from '../types/calendar';
 import { categoryById } from '../utils/categoryParser';
 import { alsoOn, dateBadge, firstLine, shortPlace, timeRange, type DateBadge } from '../utils/eventFormat';
+import EventActions from './EventActions';
 import LinkedText from './LinkedText';
 
 const BADGE_STYLES: Record<DateBadge['level'], { box: string; label: string }> = {
@@ -65,13 +66,13 @@ export default function EventCard({ event, now }: { event: CalendarEvent; now: D
             {fullPlaceDiffers && <p className='text-slate-600'>{event.location}</p>}
             {event.series && <p className='text-slate-600'>{alsoOn(event.series.later)}</p>}
           </div>
-          {/* Knapparna för karta och "Lägg till i min kalender" kommer till höger i epic 4. */}
           <div className='mt-4 flex flex-wrap items-center justify-between gap-3'>
             {event.organizer && (
               <p className='text-base text-slate-500'>
                 Arrangör: <span className='font-semibold text-slate-800'>{event.organizer}</span>
               </p>
             )}
+            <EventActions event={event} now={now} />
           </div>
         </div>
       )}
