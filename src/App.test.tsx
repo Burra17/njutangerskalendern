@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import App from './App';
 import type { CalendarEvent } from './types/calendar';
@@ -34,7 +34,10 @@ function search(text: string) {
 }
 
 function months() {
-  return screen.queryAllByRole('heading', { level: 2 }).map((heading) => heading.textContent);
+  const timeline = screen.getByRole('region', { name: 'Kommande händelser' });
+  return within(timeline)
+    .queryAllByRole('heading', { level: 2 })
+    .map((heading) => heading.textContent);
 }
 
 afterEach(cleanup);
