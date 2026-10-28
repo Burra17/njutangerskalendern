@@ -13,7 +13,7 @@ export default function Header({ events }: Props) {
 
   return (
     <header className='relative overflow-hidden bg-emerald-800 text-white'>
-      <div className='relative mx-auto max-w-6xl px-4 pt-5 pb-9 lg:flex lg:items-start lg:justify-between lg:pt-6 lg:pb-14'>
+      <div className='relative mx-auto max-w-6xl px-4 pt-5 pb-7 lg:flex lg:items-start lg:justify-between lg:pb-9'>
         <h1 className='text-3xl font-bold tracking-tight'>{villageConfig.siteName}</h1>
         <p className='mt-1 text-emerald-100 lg:hidden'>
           {headerDate(now, true)}
@@ -31,7 +31,7 @@ export default function Header({ events }: Props) {
 // Skog, en röd stuga med vita knutar, klockstapeln och vattnet. Bara grönt, utom stugan, så att den inte blir clipart.
 function VillageSilhouette() {
   return (
-    <svg aria-hidden viewBox='0 0 1200 90' preserveAspectRatio='xMidYMax slice' className='absolute inset-x-0 bottom-0 h-8 w-full lg:h-14'>
+    <svg aria-hidden viewBox='0 0 1200 90' preserveAspectRatio='xMidYMax slice' className='absolute inset-x-0 bottom-0 h-7 w-full lg:h-9'>
       <path
         fill='#0b5a45'
         d='M0 70 L40 40 L60 55 L90 25 L120 52 L150 30 L185 58 L230 34 L260 50 L300 22 L340 55 L380 38 L420 60 L470 30 L510 52 L560 36 L600 58 L650 28 L700 54 L740 40 L790 60 L840 32 L880 52 L930 26 L970 56 L1010 36 L1060 58 L1100 30 L1150 50 L1200 34 L1200 90 L0 90 Z'
