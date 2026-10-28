@@ -123,4 +123,10 @@ describe('kategorifiltret', () => {
     expect((screen.getByRole('searchbox') as HTMLInputElement).value).toBe('');
     expect(months()).toEqual(['Oktober 2026', 'November 2026']);
   });
+
+  // jsdom räknar inte ut layout, så testet kontrollerar klassen. Bredden mäts i webbläsaren (#39).
+  test('låter långa ord brytas var som helst i tidslinjen, så att sidan inte blir bredare än skärmen', () => {
+    render(<App />);
+    expect(screen.getByRole('region', { name: 'Kommande händelser' }).className).toContain('wrap-anywhere');
+  });
 });

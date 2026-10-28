@@ -38,7 +38,7 @@ export default function EventCard({ event, now }: { event: CalendarEvent; now: D
         </div>
         <div className='min-w-0 flex-1'>
           <span className={`inline-block rounded-md px-2 py-0.5 text-sm font-medium ${category.badgeClass}`}>{category.label}</span>
-          <h3 id={titleId} className='mt-1 text-lg leading-snug font-bold break-words text-slate-900'>
+          <h3 id={titleId} className='mt-1 text-lg leading-snug font-bold text-slate-900'>
             {event.title}
           </h3>
           <p id={metaId} className='mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-base text-slate-600'>
@@ -59,7 +59,7 @@ export default function EventCard({ event, now }: { event: CalendarEvent; now: D
         <div className='mx-4 border-t border-slate-100 pt-3 pb-4 sm:ml-24'>
           <div className='space-y-3 text-slate-800'>
             {event.description && (
-              <p className='break-words whitespace-pre-line'>
+              <p className='whitespace-pre-line'>
                 <LinkedText text={event.description} />
               </p>
             )}
