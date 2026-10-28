@@ -15,7 +15,12 @@ const shortDateFormat = new Intl.DateTimeFormat('sv-SE', { day: 'numeric', month
 
 // Till exempel '28 okt'. Intl skriver 'okt.', och punkten tas bort.
 export function shortDate(date: IsoDate): string {
-  return shortDateFormat.format(noonUtc(date)).replace('.', '');
+  return withoutDot(shortDateFormat.format(noonUtc(date)));
+}
+
+// Intl skriver förkortningar som 'okt.' och 'tors.' med punkt, och sajten visar dem utan.
+export function withoutDot(text: string): string {
+  return text.replace('.', '');
 }
 
 export function toStockholmDate(instant: Date): IsoDate {
@@ -25,6 +30,11 @@ export function toStockholmDate(instant: Date): IsoDate {
 // Dagen en händelse eller ett tillfälle börjar, i svensk tid.
 export function startDay(event: EventTiming): IsoDate {
   return event.allDay ? event.startDate : toStockholmDate(event.start);
+}
+
+// Dagen en händelse eller ett tillfälle slutar, i svensk tid.
+export function endDay(event: EventTiming): IsoDate {
+  return event.allDay ? event.endDate : toStockholmDate(event.end);
 }
 
 // 'YYYY-MM', som grupperar och jämför månader.

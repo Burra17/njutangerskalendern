@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { CalendarEvent, EventTiming } from '../types/calendar';
-import { countThisWeek, headerDate, weekCountText } from './weekSummary';
+import { countRestOfWeek, headerDate, weekCountText } from './weekSummary';
 
 // Onsdag 28 oktober 2026 kl. 12:00 i Stockholm. Veckan är alltså onsdag till söndag 1 november.
 const wednesday = new Date('2026-10-28T11:00:00Z');
@@ -24,26 +24,26 @@ describe('headerDate', () => {
   });
 });
 
-describe('countThisWeek', () => {
+describe('countRestOfWeek', () => {
   test('räknar från idag till och med söndag', () => {
     const events = [day('2026-10-28'), day('2026-10-30'), day('2026-11-01'), day('2026-11-02')];
-    expect(countThisWeek(events, wednesday)).toBe(3);
+    expect(countRestOfWeek(events, wednesday)).toBe(3);
   });
 
   test('räknar bara idag på en söndag', () => {
     const sunday = new Date('2026-11-01T11:00:00Z');
-    expect(countThisWeek([day('2026-11-01'), day('2026-11-02')], sunday)).toBe(1);
+    expect(countRestOfWeek([day('2026-11-01'), day('2026-11-02')], sunday)).toBe(1);
   });
 
   test('räknar en händelse över flera dagar som pågår', () => {
-    expect(countThisWeek([day('2026-10-25', { endDate: '2026-10-29' })], wednesday)).toBe(1);
-    expect(countThisWeek([day('2026-10-25', { endDate: '2026-10-27' })], wednesday)).toBe(0);
+    expect(countRestOfWeek([day('2026-10-25', { endDate: '2026-10-29' })], wednesday)).toBe(1);
+    expect(countRestOfWeek([day('2026-10-25', { endDate: '2026-10-27' })], wednesday)).toBe(0);
   });
 
   test('räknar varje tillfälle i en serie som infaller i veckan', () => {
     const onDay = (date: string): EventTiming => ({ allDay: true, startDate: date, endDate: date });
     const series = day('2026-10-29', { series: { rule: 'Flera dagar', later: ['2026-10-31', '2026-11-03'].map(onDay) } });
-    expect(countThisWeek([series], wednesday)).toBe(2);
+    expect(countRestOfWeek([series], wednesday)).toBe(2);
   });
 
   test('räknar tidsatta händelser efter svensk tid', () => {
@@ -57,11 +57,11 @@ describe('countThisWeek', () => {
     });
     const lateSunday = timed('2026-11-01T21:00:00Z', '2026-11-01T22:00:00Z');
     const mondayInSweden = timed('2026-11-01T23:30:00Z', '2026-11-02T00:30:00Z');
-    expect(countThisWeek([lateSunday, mondayInSweden], wednesday)).toBe(1);
+    expect(countRestOfWeek([lateSunday, mondayInSweden], wednesday)).toBe(1);
   });
 
   test('ger 0 när veckan är tom', () => {
-    expect(countThisWeek([], wednesday)).toBe(0);
+    expect(countRestOfWeek([], wednesday)).toBe(0);
   });
 });
 
