@@ -26,10 +26,10 @@ export function createMockEvents(now = new Date()): GoogleCalendarEvent[] {
     },
     {
       id: 'mock-2',
-      summary: '📋 Styrelsemöte',
+      summary: '⛪ Kyrkorådet',
       description:
         'Dagordning:<br>1. Ekonomi<br>2. Byfesten<br><br><a href="https://example.com/dagordning">Hela dagordningen</a> &amp; förra protokollet finns på nätet.',
-      location: 'Bygdegården, lilla salen',
+      location: 'Församlingshemmet, lilla salen',
       ...timed(2, '18:00', '20:00'),
     },
     {
@@ -77,7 +77,7 @@ export function createMockEvents(now = new Date()): GoogleCalendarEvent[] {
     },
     {
       id: 'mock-9',
-      summary: 'Vandring längs ån',
+      summary: '🧒 Scouterna vandrar längs ån',
       description: '<p>Ungefär 8 km i lugnt tempo.</p><p>Ta med matsäck.</p>',
       location: 'Samling vid kyrkan',
       ...timed(35, '10:00', '13:00'),

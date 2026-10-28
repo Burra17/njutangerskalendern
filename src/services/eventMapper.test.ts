@@ -23,18 +23,18 @@ describe('mockdatan genom hela omvandlingen', () => {
   });
 
   test.each([
-    ['mock-1', 'fika', 'Fikagruppen'],
-    ['mock-2', 'moten', undefined],
-    ['mock-3', 'natur', 'Badplatsgruppen'],
+    ['mock-1', 'gemenskap', 'Fikagruppen'],
+    ['mock-2', 'kyrka', undefined],
+    ['mock-3', 'gemenskap', 'Badplatsgruppen'],
     ['mock-4', 'loppis', undefined],
     ['mock-5', 'idrott', undefined],
     ['mock-6', 'idrott', undefined],
-    ['mock-7', 'moten', undefined],
-    ['mock-8', 'fika', undefined],
-    ['mock-9', 'natur', undefined],
+    ['mock-7', 'gemenskap', undefined],
+    ['mock-8', 'gemenskap', undefined],
+    ['mock-9', 'barn', undefined],
     ['mock-10', 'ovrigt', undefined],
     ['mock-11', 'loppis', 'Auktionsgruppen'],
-    ['mock-12', 'moten', undefined],
+    ['mock-12', 'loppis', undefined],
     ['mock-13', 'loppis', undefined],
   ])('%s får kategorin %s och arrangören %s', (id, category, organizer) => {
     expect(byId(id)).toMatchObject({ category, organizer });
@@ -82,7 +82,7 @@ describe('toCalendarEvent', () => {
   });
 
   test('letar kategorin i beskrivningen när titeln inte säger något, men inte i arrangören', () => {
-    expect(toCalendarEvent({ ...base, summary: 'Söndagsträff', description: 'Vi bjuder på fika.' }).category).toBe('fika');
+    expect(toCalendarEvent({ ...base, summary: 'Söndagsträff', description: 'Vi bjuder på fika.' }).category).toBe('gemenskap');
     expect(toCalendarEvent({ ...base, summary: 'Bokcirkel', description: 'Månadens bok.\nArrangör: Fikagruppen' }).category).toBe('ovrigt');
     expect(toCalendarEvent({ ...base, summary: undefined, description: 'Loppis i garaget' }).category).toBe('loppis');
   });

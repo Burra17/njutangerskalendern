@@ -14,7 +14,7 @@ const loppis: CalendarEvent = {
   ...timing,
 };
 const gympa: CalendarEvent = { id: 'gympa', title: 'Gympa för seniorer', category: 'idrott', ...timing };
-const mote: CalendarEvent = { id: 'mote', title: 'Årsmöte', category: 'moten', location: 'Skolan', ...timing };
+const mote: CalendarEvent = { id: 'mote', title: 'Årsmöte', category: 'ovrigt', location: 'Skolan', ...timing };
 const all = [loppis, gympa, mote];
 
 function ids(query: string) {
@@ -74,6 +74,6 @@ describe('filterByCategory', () => {
   });
 
   test('en kategori utan händelser ger en tom lista', () => {
-    expect(filterByCategory(all, 'natur')).toEqual([]);
+    expect(filterByCategory(all, 'kyrka')).toEqual([]);
   });
 });

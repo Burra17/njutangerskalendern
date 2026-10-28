@@ -6,7 +6,7 @@ import Header from './Header';
 
 // Onsdag 28 oktober 2026 kl. 12:00 i Stockholm.
 const now = new Date('2026-10-28T11:00:00Z');
-const fika: CalendarEvent = { id: 'fika', title: 'Fika', category: 'fika', allDay: true, startDate: '2026-10-29', endDate: '2026-10-29' };
+const fika: CalendarEvent = { id: 'fika', title: 'Fika', category: 'gemenskap', allDay: true, startDate: '2026-10-29', endDate: '2026-10-29' };
 
 afterEach(() => {
   cleanup();

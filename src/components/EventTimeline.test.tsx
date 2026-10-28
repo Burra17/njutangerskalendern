@@ -7,12 +7,19 @@ import EventTimeline from './EventTimeline';
 const fika: CalendarEvent = {
   id: 'fika',
   title: 'TEST ☕ Fika',
-  category: 'fika',
+  category: 'gemenskap',
   allDay: false,
   start: new Date('2026-10-28T14:30:00Z'),
   end: new Date('2026-10-28T15:30:00Z'),
 };
-const byfest: CalendarEvent = { id: 'byfest', title: 'TEST Byfest', category: 'fika', allDay: true, startDate: '2026-11-01', endDate: '2026-11-03' };
+const byfest: CalendarEvent = {
+  id: 'byfest',
+  title: 'TEST Byfest',
+  category: 'gemenskap',
+  allDay: true,
+  startDate: '2026-11-01',
+  endDate: '2026-11-03',
+};
 
 const idle = { events: [], query: '', category: null, onReset: () => {}, isLoading: false, error: null, onRetry: () => {} };
 

@@ -10,7 +10,7 @@ const now = new Date('2026-10-27T11:00:00Z');
 const meeting: CalendarEvent = {
   id: 'mote',
   title: 'TEST Styrelsemöte',
-  category: 'moten',
+  category: 'kyrka',
   description: 'Dagordning:\n• Ekonomi\nRing 070-174 06 05 eller se https://example.com/protokoll',
   location: 'Bygdegården, Njutångersvägen 12, 825 96 Njutånger',
   organizer: 'Byalaget',
@@ -63,7 +63,7 @@ describe('EventCard', () => {
     expect(button.getAttribute('aria-expanded')).toBe('false');
     expect(within(button).getByText('tors')).toBeTruthy();
     expect(within(button).getByText('29')).toBeTruthy();
-    expect(within(button).getByText('Möten & Beslut')).toBeTruthy();
+    expect(within(button).getByText('Kyrka')).toBeTruthy();
     expect(within(button).getByText('15:00–16:00')).toBeTruthy();
     expect(within(button).getByText('Bygdegården')).toBeTruthy();
     expect(within(button).getByText('Dagordning:')).toBeTruthy();
@@ -150,15 +150,15 @@ describe('EventCard', () => {
   test('flyttar kategoriemojin från titeln till etiketten', () => {
     render(
       <ul>
-        <EventCard event={{ ...meeting, title: '📋 Styrelsemöte', categoryEmoji: '📋' }} now={now} />
+        <EventCard event={{ ...meeting, title: '⛪ Kyrkorådet', categoryEmoji: '⛪' }} now={now} />
       </ul>,
     );
-    const button = screen.getByRole('button', { name: 'Styrelsemöte' });
-    expect(within(button).getByText('Möten & Beslut', { exact: false }).textContent).toBe('📋 Möten & Beslut');
+    const button = screen.getByRole('button', { name: 'Kyrkorådet' });
+    expect(within(button).getByText('Kyrka', { exact: false }).textContent).toBe('⛪ Kyrka');
   });
 
   test('ger etiketten kategorins egen emoji när titeln inte har någon', () => {
     const button = renderCard(meeting);
-    expect(within(button).getByText('Möten & Beslut', { exact: false }).textContent).toBe('📋 Möten & Beslut');
+    expect(within(button).getByText('Kyrka', { exact: false }).textContent).toBe('⛪ Kyrka');
   });
 });

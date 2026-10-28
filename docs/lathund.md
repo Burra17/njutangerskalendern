@@ -10,25 +10,25 @@ Allt du lägger in i kalendern Njutångerskalendern syns på sajten. Du behöver
 
 ## 2. Skriv titeln så att den får rätt färg
 
-Sajten färgar händelsen efter vad som står i titeln. Börja gärna titeln med kategorins emoji. Det fungerar också att bara skriva ett av orden nedan. Ordet får gärna vara en del av ett längre ord, till exempel "Styrelsemöte" eller "Vårstädning".
+Sajten färgar händelsen efter vad som står i titeln. Börja gärna titeln med kategorins emoji. Det fungerar också att bara skriva ett av orden nedan. Ordet får gärna vara en del av ett längre ord, till exempel "Kyrkkör" eller "Vårstädning".
 
-| Kategori         | Emoji först i titeln | Andra emojis | Ord som fungerar                         |
-| ---------------- | -------------------- | ------------ | ---------------------------------------- |
-| Fika & Gemenskap | ☕                   | 🇸🇪 🎉        | fika, fest, midsommar, pub, grill        |
-| Natur & Fix      | 🌲                   | 🧹 🌸        | städ, arbetsdag, brygga, vandring, fixa  |
-| Loppis & Marknad | 🏷️                   | 🛍️           | loppis, marknad, baklucke, auktion       |
-| Möten & Beslut   | 📋                   | 🏛️           | möte, årsmöte, stämma, styrelse          |
-| Idrott & Motion  | ⚽                   | 🏃           | träning, fotboll, gympa, bastu           |
-| Övrigt           |                      |              | Allt som inte passar in ovan hamnar här. |
+| Kategori                                | Emoji först i titeln | Andra emojis   | Ord som fungerar                                                          |
+| --------------------------------------- | -------------------- | -------------- | ------------------------------------------------------------------------- |
+| Gemenskap                               | ☕                   | 🇸🇪 🎉          | fika, fest, servering, café, midsommar, pub, grill, städ, arbetsdag, fixa |
+| Kyrka (EFS-kyrkan och Njutångers kyrka) | ⛪                   | 🕊️ 🕯️ ✝️ 📖 🔔 | gudstjänst, mässa, andakt, bön, psalm, kyrk, EFS                          |
+| Loppis & Marknad                        | 🏷️                   | 🛍️             | loppis, marknad, auktion, försäljning, baklucke                           |
+| Barn och ungdom                         | 🧒                   | 🎈 ⛺ 🎨       | barn, ungdom, scout, läger, fritids, kalas, lek                           |
+| Idrott                                  | ⚽                   | 🏃             | träning, fotboll, gympa, bastu                                            |
+| Övrigt                                  |                      |                | Allt som inte passar in ovan hamnar här.                                  |
 
-- **Det som står först bestämmer.** "Årsmöte med fika" blir Möten, eftersom "möte" kommer före "fika".
-- **"pub" måste stå som eget ord**, så att till exempel "Publik visning" inte blir en pubkväll.
+- **Det som står först bestämmer.** "Barnloppis" blir Barn och ungdom, eftersom "barn" kommer före "loppis".
+- **"pub", "EFS", "bön" och "lek" måste stå som egna ord**, så att till exempel "Publik visning" inte blir en pubkväll.
 - **Om titeln inte säger något** letar sajten i beskrivningen i stället.
 
 Exempel:
 
-- **☕ Fika i bygdegården** blir Fika & Gemenskap.
-- **Årsmöte med fika** blir Möten & Beslut.
+- **☕ Fika i bygdegården** blir Gemenskap.
+- **Årsmöte med fika** blir Gemenskap.
 - **Bokcirkel** blir Övrigt.
 
 ## 3. Arrangör

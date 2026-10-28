@@ -7,7 +7,8 @@ describe('docs/lathund.md', () => {
   test.each(CATEGORIES.map((category) => [category.label, category]))('tar upp %s', (_label, category) => {
     expect(lathund).toContain(category.label);
     for (const emoji of category.emojis) expect(lathund).toContain(emoji);
-    for (const keyword of category.keywords) expect(lathund).toContain(keyword);
+    // Matchningen skiljer inte på stora och små bokstäver, så lathunden får skriva till exempel EFS.
+    for (const keyword of category.keywords) expect(lathund.toLowerCase()).toContain(keyword);
   });
 
   test('beskriver kalendern och raden Arrangör:', () => {
